@@ -1,0 +1,672 @@
+CREATE TABLE users (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    mobile_number VARCHAR(15) NULL UNIQUE,
+    name VARCHAR(100),
+    email VARCHAR(100) NULL  UNIQUE,
+    password VARCHAR(255) NULL ,
+	status ENUM('active', 'inactive') DEFAULT 'active', -- Setting default status as active
+	user_type ENUM('superadmin','admin', 'user', 'vendor') DEFAULT 'user', -- Setting default user type as user
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+
+CREATE UNIQUE INDEX idx_mobile_number ON users (mobile_number);
+CREATE UNIQUE INDEX idx_email ON users (email);
+CREATE INDEX idx_status ON users (status);
+CREATE INDEX idx_user_type ON users (user_type);
+
+----------------------------------------------------------------------------------------------------------------------
+
+
+CREATE TABLE otp_requests (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    user_id BIGINT NOT NULL,
+    otp_code VARCHAR(10) NOT NULL,
+    is_used BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    expires_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE INDEX idx_user_id ON otp_requests (user_id);
+
+CREATE INDEX idx_otp_code ON otp_requests (otp_code);
+
+CREATE INDEX idx_is_used ON otp_requests (is_used);
+
+CREATE INDEX idx_expires_at ON otp_requests (expires_at);
+
+DROP INDEX idx_expires_at ON otp_requests;
+
+----------------------------------------------------------------------------------------------------------------------
+
+
+CREATE TABLE devices (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    user_id BIGINT NOT NULL,
+    device_name VARCHAR(100) NULL,
+    device_ip VARCHAR(45) NULL,
+    device_os VARCHAR(80) NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    last_login_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id, user_id)
+) PARTITION BY LIST (user_id) (
+    PARTITION p_0 VALUES IN (0)
+);
+
+CREATE INDEX idx_user_id ON devices (user_id);
+
+----------------------------------------------------------------------------------------------------------------------
+
+
+CREATE TABLE jwt_tokens (
+    id BIGINT AUTO_INCREMENT,
+    user_id BIGINT NOT NULL,
+    device_id BIGINT NOT NULL,
+    access_jti VARCHAR(256) NOT NULL,
+    refresh_jti VARCHAR(256) NOT NULL,
+    revoked BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    expires_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id, user_id)
+) PARTITION BY LIST (user_id) (
+    PARTITION p_0 VALUES IN (0)
+);
+
+
+
+# CREATE TABLE jwt_tokens (
+#     id BIGINT AUTO_INCREMENT PRIMARY KEY,
+#     user_id BIGINT NOT NULL,
+#     device_id BIGINT NOT NULL,
+#     access_jti VARCHAR(256) NOT NULL,
+# 	refresh_jti VARCHAR(256) NOT NULL,
+# 	revoked BOOLEAN DEFAULT FALSE,
+#     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+#     expires_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+#     FOREIGN KEY (user_id) REFERENCES users(id),
+#     FOREIGN KEY (device_id) REFERENCES devices(id)
+# );
+
+CREATE INDEX idx_user_id ON jwt_tokens (user_id);
+CREATE INDEX idx_device_id ON jwt_tokens (device_id);
+CREATE INDEX idx_access_jti ON jwt_tokens (access_jti);
+CREATE INDEX idx_refresh_jti ON jwt_tokens (refresh_jti);
+CREATE INDEX idx_revoked ON jwt_tokens (revoked);
+
+----------------------------------------------------------------------------------------------------------------------
+
+CREATE TABLE password_reset_tokens (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    user_id BIGINT NOT NULL,
+    email VARCHAR(120) NOT NULL,
+    token VARCHAR(200) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    is_used BOOLEAN DEFAULT FALSE,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+CREATE INDEX idx_user_id ON password_reset_tokens (user_id);
+CREATE INDEX idx_token ON password_reset_tokens (token);
+CREATE INDEX idx_is_used ON password_reset_tokens (is_used);
+
+----------------------------------------------------------------------------------------------------------------------
+
+CREATE TABLE master_meal_options (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(120) NULL,
+	is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	added_by BIGINT NOT NULL,
+    FOREIGN KEY (added_by) REFERENCES users(id) ON DELETE CASCADE
+);
+CREATE INDEX idx_added_by ON master_meal_options (added_by);
+CREATE INDEX idx_is_active ON master_meal_options (is_active);
+
+----------------------------------------------------------------------------------------------------------------------
+
+CREATE TABLE master_room_types (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(120) NULL,
+	is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	added_by BIGINT NOT NULL,
+    FOREIGN KEY (added_by) REFERENCES users(id) ON DELETE CASCADE
+);
+CREATE INDEX idx_added_by ON master_room_types (added_by);
+CREATE INDEX idx_is_active ON master_room_types (is_active);
+
+----------------------------------------------------------------------------------------------------------------------
+
+CREATE TABLE master_bed_types (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(120) NULL,
+	is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	added_by BIGINT NOT NULL,
+    FOREIGN KEY (added_by) REFERENCES users(id) ON DELETE CASCADE
+);
+CREATE INDEX idx_added_by ON master_bed_types (added_by);
+CREATE INDEX idx_is_active ON master_bed_types (is_active);
+
+----------------------------------------------------------------------------------------------------------------------
+
+CREATE TABLE master_extra_bed_types (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(120) NULL,
+	is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	added_by BIGINT NOT NULL,
+    FOREIGN KEY (added_by) REFERENCES users(id) ON DELETE CASCADE
+);
+CREATE INDEX idx_added_by ON master_extra_bed_types (added_by);
+CREATE INDEX idx_is_active ON master_extra_bed_types (is_active);
+
+--------------------------------------------------------------------------------------------------------------------
+
+CREATE TABLE master_room_views (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(120) NULL,
+	is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	added_by BIGINT NOT NULL,
+    FOREIGN KEY (added_by) REFERENCES users(id) ON DELETE CASCADE
+);
+CREATE INDEX idx_added_by ON master_room_views (added_by);
+CREATE INDEX idx_is_active ON master_room_views (is_active);
+
+----------------------------------------------------------------------------------------------------------------------
+# Don't Used
+
+CREATE TABLE property (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(120) NULL,
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    added_by BIGINT NOT NULL,
+    FOREIGN KEY (added_by) REFERENCES users(id) ON DELETE CASCADE
+);
+CREATE INDEX idx_added_by ON property (added_by);
+CREATE INDEX idx_is_active ON property (is_active);
+
+--------------------------------------------------------------------------------------------------------------------
+# Don't Used
+
+CREATE TABLE property_type (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    property_id int NOT NULL,
+    name VARCHAR(120) NULL,
+    image VARCHAR(150) NULL,
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    added_by BIGINT NOT NULL,
+    FOREIGN KEY (property_id) REFERENCES property(id) ON DELETE CASCADE,
+    FOREIGN KEY (added_by) REFERENCES users(id) ON DELETE CASCADE
+);
+CREATE INDEX idx_property_id ON property_type (property_id);
+CREATE INDEX idx_added_by ON property_type (added_by);
+CREATE INDEX idx_is_active ON property_type (is_active);
+
+ALTER TABLE `property_type` ADD `image` VARCHAR(150) NULL DEFAULT NULL AFTER `name`;
+
+------------------------------------------------------------------------------------------------------------------------
+# Don't Used
+
+CREATE TABLE main_amenities (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    property_type_id int NOT NULL,
+    name VARCHAR(120) NULL,
+    image VARCHAR(150) NULL,
+    icon VARCHAR(50) NULL,
+	is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	added_by BIGINT NOT NULL,
+    FOREIGN KEY (property_type_id) REFERENCES property_type(id) ON DELETE CASCADE,
+    FOREIGN KEY (added_by) REFERENCES users(id) ON DELETE CASCADE
+);
+CREATE INDEX idx_property_type_id ON main_amenities (property_type_id);
+CREATE INDEX idx_added_by ON main_amenities (added_by);
+CREATE INDEX idx_is_active ON main_amenities (is_active);
+
+ALTER TABLE `main_amenities` ADD `image` VARCHAR(150) NULL DEFAULT NULL AFTER `name`, ADD `icon` VARCHAR(50) NULL DEFAULT NULL AFTER `image`;
+
+----------------------------------------------------------------------------------------------------------------------
+# Don't Used
+
+CREATE TABLE sub_amenities (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    main_amenity_id INT NOT NULL,
+    name VARCHAR(120) NULL,
+    image VARCHAR(150) NULL,
+    icon VARCHAR(50) NULL,
+    is_select_box BOOLEAN DEFAULT TRUE,
+    select_box_type enum('select','multiselect') DEFAULT 'select',
+	is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	added_by BIGINT NOT NULL,
+    FOREIGN KEY (main_amenity_id) REFERENCES main_amenities(id) ON DELETE CASCADE,
+    FOREIGN KEY (added_by) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE INDEX idx_main_amenity_id ON sub_amenities (main_amenity_id);
+CREATE INDEX idx_added_by ON sub_amenities (added_by);
+CREATE INDEX idx_is_active ON sub_amenities (is_active);
+
+ALTER TABLE `sub_amenities` ADD `image` VARCHAR(150) NULL DEFAULT NULL AFTER `name`, ADD `icon` VARCHAR(50) NULL DEFAULT NULL AFTER `image`;
+
+----------------------------------------------------------------------------------------------------------------------
+# Don't Used
+
+CREATE TABLE sub_1_amenities (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    sub_amenity_id INT NOT NULL,
+    name VARCHAR(120) NULL,
+    image VARCHAR(150) NULL,
+    icon VARCHAR(50) NULL,
+    is_select_box BOOLEAN DEFAULT TRUE,
+    select_box_type enum('select','multiselect') DEFAULT 'select',
+	is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	added_by BIGINT NOT NULL,
+    FOREIGN KEY (sub_amenity_id) REFERENCES sub_amenities(id) ON DELETE CASCADE,
+    FOREIGN KEY (added_by) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE INDEX idx_sub_amenity_id ON sub_1_amenities (sub_amenity_id);
+CREATE INDEX idx_added_by ON sub_1_amenities (added_by);
+CREATE INDEX idx_is_active ON sub_1_amenities (is_active);
+
+ALTER TABLE `sub_1_amenities` ADD `image` VARCHAR(150) NULL DEFAULT NULL AFTER `name`, ADD `icon` VARCHAR(50) NULL DEFAULT NULL AFTER `image`;
+
+-----------------------------------------------------------------------------------------------------------------------------
+# Don't Used
+
+CREATE TABLE sub_2_amenities (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    sub_amenity_id INT NOT NULL,
+    name VARCHAR(120) NULL,
+    image VARCHAR(150) NULL,
+    icon VARCHAR(50) NULL,
+	is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	added_by BIGINT NOT NULL,
+    FOREIGN KEY (sub_amenity_id) REFERENCES sub_1_amenities(id) ON DELETE CASCADE,
+    FOREIGN KEY (added_by) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE INDEX idx_main_sub_amenity_id ON sub_2_amenities (sub_amenity_id);
+CREATE INDEX idx_added_by ON sub_2_amenities (added_by);
+CREATE INDEX idx_is_active ON sub_2_amenities (is_active);
+
+ALTER TABLE `sub_2_amenities` ADD `image` VARCHAR(150) NULL DEFAULT NULL AFTER `name`, ADD `icon` VARCHAR(50) NULL DEFAULT NULL AFTER `image`;
+
+--------------------------------------------------------------------------------------------------------------------------------
+
+CREATE TABLE master_cancellation_policy (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(120) NULL,
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    added_by BIGINT NOT NULL,
+    FOREIGN KEY (added_by) REFERENCES users(id) ON DELETE CASCADE
+);
+CREATE INDEX idx_added_by ON master_cancellation_policy (added_by);
+CREATE INDEX idx_is_active ON master_cancellation_policy (is_active);
+
+
+--------------------------------------------------------------------------------------------------------------------------------
+
+
+CREATE TABLE master_guest_profile_rules (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(120) NULL,
+    options JSON NULL,
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    added_by BIGINT NOT NULL,
+    FOREIGN KEY (added_by) REFERENCES users(id) ON DELETE CASCADE
+);
+CREATE INDEX idx_added_by ON master_guest_profile_rules (added_by);
+CREATE INDEX idx_is_active ON master_guest_profile_rules (is_active);
+
+--------------------------------------------------------------------------------------------------------------------------------
+
+CREATE TABLE master_property_restrictions (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(256) NULL,
+    options JSON NULL,
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    added_by BIGINT NOT NULL,
+    FOREIGN KEY (added_by) REFERENCES users(id) ON DELETE CASCADE
+);
+CREATE INDEX idx_added_by ON master_property_restrictions (added_by);
+CREATE INDEX idx_is_active ON master_property_restrictions (is_active);
+
+
+--------------------------------------------------------------------------------------------------------------------------------
+
+CREATE TABLE master_acceptable_identity_proofs (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(120) NULL,
+    file_formats VARCHAR(120) NULL,
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    added_by BIGINT NOT NULL,
+    FOREIGN KEY (added_by) REFERENCES users(id) ON DELETE CASCADE
+);
+CREATE INDEX idx_added_by ON master_acceptable_identity_proofs (added_by);
+CREATE INDEX idx_is_active ON master_acceptable_identity_proofs (is_active);
+
+--------------------------------------------------------------------------------------------------------------------------------
+
+CREATE TABLE master_pet_policies (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(120) NULL,
+    options JSON NULL,
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    added_by BIGINT NOT NULL,
+    FOREIGN KEY (added_by) REFERENCES users(id) ON DELETE CASCADE
+);
+CREATE INDEX idx_added_by ON master_pet_policies (added_by);
+CREATE INDEX idx_is_active ON master_pet_policies (is_active);
+
+--------------------------------------------------------------------------------------------------------------------------------
+
+CREATE TABLE master_checkin_and_checkout_policies (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(120) NULL,
+    options JSON NULL,
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    added_by BIGINT NOT NULL,
+    FOREIGN KEY (added_by) REFERENCES users(id) ON DELETE CASCADE
+);
+CREATE INDEX idx_added_by ON master_checkin_and_checkout_policies (added_by);
+CREATE INDEX idx_is_active ON master_checkin_and_checkout_policies (is_active);
+
+--------------------------------------------------------------------------------------------------------------------------------
+
+CREATE TABLE master_extra_bed_policies (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(120) NULL,
+    options JSON NULL,
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    added_by BIGINT NOT NULL,
+    FOREIGN KEY (added_by) REFERENCES users(id) ON DELETE CASCADE
+);
+CREATE INDEX idx_added_by ON master_extra_bed_policies (added_by);
+CREATE INDEX idx_is_active ON master_extra_bed_policies (is_active);
+
+----------------------------------------------------------------------------------------------------------------------
+
+CREATE TABLE property_type (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(120) NULL,
+    description TEXT NULL,
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    added_by BIGINT NOT NULL,
+    FOREIGN KEY (added_by) REFERENCES users(id) ON DELETE CASCADE
+);
+CREATE INDEX idx_added_by ON property_type (added_by);
+CREATE INDEX idx_is_active ON property_type (is_active);
+
+---------------------------------------------------------------------------------------------------------------------------
+
+CREATE TABLE property_sub_type (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    property_type_id int NOT NULL,
+    name VARCHAR(120) NULL,
+    image VARCHAR(150) NULL,
+    description TEXT NULL,
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    added_by BIGINT NOT NULL,
+    FOREIGN KEY (property_type_id) REFERENCES property_type(id) ON DELETE CASCADE,
+    FOREIGN KEY (added_by) REFERENCES users(id) ON DELETE CASCADE
+);
+CREATE INDEX idx_property_id ON property_sub_type (property_type_id);
+CREATE INDEX idx_added_by ON property_sub_type (added_by);
+CREATE INDEX idx_is_active ON property_sub_type (is_active);
+
+---------------------------------------------------------------------------------------------------------------------------------
+
+CREATE TABLE properties (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    user_id BIGINT NOT NULL,
+    property_type_id INT NOT NULL,
+    property_name VARCHAR(256) NULL,
+    unique_id INT NOT NULL UNIQUE,
+    property_slug VARCHAR(256) NULL,
+    hotel_star_rating INT DEFAULT 0,
+    property_built_year INT DEFAULT NULL,
+    have_channel_manager VARCHAR(50) NULL,
+    channel_manager_id BIGINT DEFAULT 0,
+    mobile_no VARCHAR(50) NULL,
+    email_id VARCHAR(100) NULL,
+    search_location VARCHAR(256) NULL,
+    latitude DECIMAL(9,6) DEFAULT NULL,
+    longitude DECIMAL(9,6) DEFAULT NULL,
+    location_point POINT NOT NULL,  -- Set as NOT NULL for SPATIAL INDEX
+    SPATIAL INDEX(location_point),  -- Spatial index for efficient querying
+    house_no VARCHAR(100) NULL,
+    locality VARCHAR(200) NULL,
+    pincode VARCHAR(50) NULL,
+    country VARCHAR(50) NULL,
+    state VARCHAR(50) NULL,
+    city VARCHAR(50) NULL,
+    i_agree_terms_condition BOOLEAN DEFAULT FALSE,
+    property_amenities_json JSON NULL,
+    is_basic_info BOOLEAN DEFAULT FALSE,
+    is_location BOOLEAN DEFAULT FALSE,
+    is_amenities BOOLEAN DEFAULT FALSE,
+    is_rooms BOOLEAN DEFAULT FALSE,
+    is_photos_videos BOOLEAN DEFAULT FALSE,
+    is_policies BOOLEAN DEFAULT FALSE,
+    is_finance_legal BOOLEAN DEFAULT FALSE,
+    is_all_step_complete BOOLEAN DEFAULT FALSE,
+    is_approve BOOLEAN DEFAULT FALSE,
+    is_active BOOLEAN DEFAULT FALSE,
+    is_delete BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    
+    FOREIGN KEY (property_type_id) REFERENCES property_sub_type(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE INDEX idx_id ON properties (id);
+CREATE INDEX idx_user_id ON properties (user_id);
+CREATE INDEX idx_property_type_id ON properties (property_type_id);
+CREATE INDEX idx_unique_id ON properties (unique_id);
+CREATE INDEX idx_property_slug ON properties (property_slug);
+CREATE INDEX idx_channel_manager_id ON properties (channel_manager_id);
+CREATE INDEX idx_latitude ON properties (latitude);
+CREATE INDEX idx_longitude ON properties (longitude);
+CREATE INDEX idx_is_basic_info ON properties (is_basic_info);
+CREATE INDEX idx_is_location ON properties (is_location);
+CREATE INDEX idx_is_amenities ON properties (is_amenities);
+CREATE INDEX idx_is_rooms ON properties (is_rooms);
+CREATE INDEX idx_is_photos_videos ON properties (is_photos_videos);
+CREATE INDEX idx_is_policies ON properties (is_policies);
+CREATE INDEX idx_is_finance_legal ON properties (is_finance_legal);
+CREATE INDEX idx_is_all_step_complete ON properties (is_all_step_complete);
+CREATE INDEX idx_is_approve ON properties (is_approve);
+CREATE INDEX idx_is_active ON properties (is_active);
+CREATE INDEX idx_is_delete ON properties (is_delete);
+--------------------------------------------------------------------------------------------------------------------------
+
+CREATE TABLE master_locations (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    search_location VARCHAR(256) NULL,
+    location_point POINT NOT NULL,  -- Set as NOT NULL for SPATIAL INDEX
+    SPATIAL INDEX(location_point),  -- Spatial index for efficient querying
+    latitude DECIMAL(9,6),
+    longitude DECIMAL(9,6),
+    house_no VARCHAR(100) NULL,
+    locality VARCHAR(200) NULL,
+    pincode VARCHAR(50) NULL,
+    country VARCHAR(50) NULL,
+    state VARCHAR(50) NULL,
+    city VARCHAR(50) NULL,
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+CREATE INDEX idx_search_location ON master_locations (search_location);
+CREATE INDEX idx_locality ON master_locations (locality);
+CREATE INDEX idx_pincode ON master_locations (pincode);
+CREATE INDEX idx_country ON master_locations (country);
+CREATE INDEX idx_state ON master_locations (state);
+CREATE INDEX idx_city ON master_locations (city);
+
+-------------------------------------------------------------------------------------------------------------------------
+
+
+CREATE TABLE rooms (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    user_id BIGINT NOT NULL,
+    property_id BIGINT NOT NULL,
+    unique_id INT NOT NULL UNIQUE,
+    room_name VARCHAR(200) NULL,
+    room_slug VARCHAR(200) NULL,
+    room_description TEXT NULL,
+    number_of_available_rooms INT DEFAULT 0,
+    meal_option_id INT DEFAULT NULL,
+    room_type_id INT DEFAULT NULL,
+    bed_type_id INT DEFAULT NULL,
+    room_size_area INT DEFAULT 0,
+    room_size_area_format VARCHAR(50) NULL,
+    room_view_id INT DEFAULT NULL,
+    smoking_allowed VARCHAR(50) NULL,
+    extra_bed VARCHAR(50) NULL,
+    extra_bed_type_id INT DEFAULT NULL,
+    room_occupancy_base_adults INT DEFAULT 0,
+    room_occupancy_maximum_adults INT DEFAULT 0,
+    room_occupancy_maximum_children INT DEFAULT 0,
+    room_occupancy_maximum_occupancy INT DEFAULT 0,
+    base_room_price DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
+    base_extra_adult_charge DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
+    charges_for_child DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
+    availability_start_date DATE DEFAULT NULL,
+    availability_end_date DATE DEFAULT NULL,
+    rooms_amenities_json JSON NULL,
+    is_approve BOOLEAN DEFAULT FALSE,
+    is_active BOOLEAN DEFAULT FALSE,
+    is_delete BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    
+    FOREIGN KEY (property_id) REFERENCES properties(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (meal_option_id) REFERENCES master_meal_options(id) ON DELETE SET NULL,
+    FOREIGN KEY (room_type_id) REFERENCES master_room_types(id) ON DELETE SET NULL,
+    FOREIGN KEY (bed_type_id) REFERENCES master_bed_types(id) ON DELETE SET NULL,
+    FOREIGN KEY (room_view_id) REFERENCES master_room_views(id) ON DELETE SET NULL,
+    FOREIGN KEY (extra_bed_type_id) REFERENCES master_extra_bed_types(id) ON DELETE SET NULL
+);
+CREATE INDEX idx_user_id ON rooms (user_id);
+CREATE INDEX idx_property_id ON rooms (property_id);
+CREATE INDEX idx_unique_id ON rooms (unique_id);
+CREATE INDEX idx_room_slug ON rooms (room_slug);
+CREATE INDEX idx_meal_option_id ON rooms (meal_option_id);
+CREATE INDEX idx_room_type_id ON rooms (room_type_id);
+CREATE INDEX idx_bed_type_id ON rooms (bed_type_id);
+CREATE INDEX idx_room_view_id ON rooms (room_view_id);
+CREATE INDEX idx_extra_bed_type_id ON rooms (extra_bed_type_id);
+CREATE INDEX idx_availability_start_date ON rooms (availability_start_date);
+CREATE INDEX idx_availability_end_date ON rooms (availability_end_date);
+CREATE INDEX idx_is_approve ON rooms (is_approve);
+CREATE INDEX idx_is_active ON rooms (is_active);
+CREATE INDEX idx_is_delete ON rooms (is_delete);
+
+
+
+------------------------------------------------------------------------------------------------------------------------
+
+CREATE TABLE property_images (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    user_id BIGINT NOT NULL,
+    property_id BIGINT NOT NULL,
+    image_name VARCHAR(200) NULL,
+    image_alt VARCHAR(256) NULL,
+    image_path VARCHAR(200) NULL,
+    image_extention VARCHAR(200) NULL,
+    image_size VARCHAR(100) NULL,
+    tag_ids VARCHAR(200) NULL,
+    is_cover_photo BOOLEAN DEFAULT FALSE,
+    is_approve BOOLEAN DEFAULT FALSE,
+    is_photos BOOLEAN DEFAULT TRUE,
+    is_active BOOLEAN DEFAULT FALSE,
+    is_delete BOOLEAN DEFAULT FALSE,
+    serial_no INT DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    
+    FOREIGN KEY (property_id) REFERENCES properties(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+CREATE INDEX idx_id ON property_images (id);
+CREATE INDEX idx_user_id ON property_images (user_id);
+CREATE INDEX idx_property_id ON property_images (property_id);
+CREATE INDEX idx_tag_ids ON property_images (tag_ids);
+CREATE INDEX idx_is_cover_photo ON property_images (is_cover_photo);
+CREATE INDEX idx_is_approve ON property_images (is_approve);
+CREATE INDEX idx_is_active ON property_images (is_active);
+CREATE INDEX idx_is_delete ON property_images (is_delete);
+CREATE INDEX idx_serial_no ON property_images (serial_no);
+
+---------------------------------------------------------------------------------------------------------------------------
+# For R&D Purpose
+SHOW CREATE TABLE jwt_tokens;
+EXPLAIN PARTITIONS SELECT * FROM jwt_tokens WHERE user_id = 1;
+
+
+
+-- Disable foreign key checks
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- Truncate tables (truncate operations will work now)
+TRUNCATE TABLE otp_requests;
+TRUNCATE TABLE users;
+
+-- Re-enable foreign key checks
+SET FOREIGN_KEY_CHECKS = 1;
+
+
+[6:04 am, 6/5/2024] Kousik Mondal: Sunderban Goibibo
+E-mail ID : sunderbantigerroarresort@gmail.com
+PW : madhuban2017@
+[6:04 am, 6/5/2024] Kousik Mondal: URL: www.axisrooms.com 
+Product type: Channel Manager 
+Id : sunderbantigerroarresort@gmail.com
+Password : 4RW3oK3Ep7
+
+
+https://chatgpt.com/share/3f003d2e-d3cf-4807-902c-8aa67f90dd76
+https://chatgpt.com/share/6a4e4a79-8ae6-4bf8-a6a6-607a0bb8a576
+https://chatgpt.com/share/6cc1c04f-c839-41be-a2a6-3a4bb3354190
+https://chatgpt.com/share/39a7a32f-6ce3-4b42-98a5-8eece69abaca (User Last Activity)
