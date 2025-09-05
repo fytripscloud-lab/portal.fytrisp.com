@@ -1,0 +1,119 @@
+<div class="addContainer">
+  <div class="modalHeader">
+    <div class="editRowModal">
+      <div class="modalHeader clearfix">
+        <div class="modal-about">
+          <div class="p-t-5 font-17 font-b-500">
+            {{dialogTitle}}</div>
+        </div>
+      </div>
+    </div>
+    <button mat-icon-button (click)="dialogRef.close()" class="modal-close-button" aria-label="Close dialog">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div mat-dialog-content>
+    <form class="register-form m-4" [formGroup]="categoryForm">
+      <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width mb-3" appearance="outline">
+            <mat-label>Name</mat-label>
+            <input matInput formControlName="name" required>
+            <mat-icon matSuffix matTooltip="Enter travel category name." [matTooltipPosition]="positionOptions[4]!">info</mat-icon>
+            @if (categoryForm.get('name')?.hasError('required')) {
+            <mat-error>
+              Category name is required
+            </mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width mb-3" appearance="outline">
+            <mat-label>Description</mat-label>
+            <textarea matInput formControlName="description"></textarea>
+            @if (categoryForm.get('description')?.hasError('required')) {
+            <mat-error>
+              Description is required
+            </mat-error>
+            }
+          </mat-form-field>
+        </div>
+          <div class=" col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+            <mat-form-field class="example-full-width mb-3" appearance="outline">
+              <mat-label>Meta Title</mat-label>
+              <input matInput formControlName="meta_title">
+              <mat-icon matSuffix matTooltip="The meta title is a crucial element for SEO and user engagement. It appears as the clickable headline in search engine results and should clearly describe the page's content. Keep it under 60 characters for optimal display, and include relevant keywords to improve visibility. Aim for clarity and relevance, making it enticing for users to click." [matTooltipPosition]="positionOptions[4]!">info</mat-icon>
+              @if (categoryForm.get('meta_title')?.hasError('required')) {
+              <mat-error>
+                Meta title is required
+              </mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div class=" col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+            <mat-form-field class="example-full-width mb-3" appearance="outline">
+              <mat-label>Meta Keywords</mat-label>
+              <input matInput formControlName="meta_keywords">
+              <mat-icon matSuffix matTooltip="Meta keywords are relevant terms that help search engines understand your page. Use a few targeted keywords, focusing on quality, not quantity." [matTooltipPosition]="positionOptions[4]!">info</mat-icon>
+            </mat-form-field>
+          </div>
+          <div class=" col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+            <mat-form-field class="example-full-width mb-3" appearance="outline">
+              <mat-label>Meta Description</mat-label>
+              <textarea matInput formControlName="meta_description"></textarea>
+              <mat-icon matSuffix matTooltip="The meta description is a brief summary of your page's content. Keep it under 160 characters, include key terms, and make it enticing to encourage clicks." [matTooltipPosition]="positionOptions[4]!">info</mat-icon>
+            </mat-form-field>
+          </div>
+          <div class=" col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+            <mat-form-field class="example-full-width mb-3" appearance="outline">
+              <mat-label>Meta Tags</mat-label>
+              <textarea matInput formControlName="meta_tags"></textarea>
+              <mat-icon matSuffix matTooltip="Meta tags provide metadata about your webpage, helping search engines understand its content. Include relevant keywords, descriptions, and other essential info for SEO." [matTooltipPosition]="positionOptions[4]!">info</mat-icon>
+            </mat-form-field>
+          </div>
+          <div class=" col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+            <mat-form-field class="example-full-width mb-3" appearance="outline">
+              <mat-label>Image Alt Tag</mat-label>
+              <input matInput formControlName="image_alt">            
+              <mat-icon matSuffix matTooltip="Alt text (alternative text) is a short description of an image that appears if the image can't be displayed or for accessibility purposes, helping screen readers describe the image to visually impaired users. It also aids in SEO by providing context to search engines." [matTooltipPosition]="'left'">info</mat-icon>
+            </mat-form-field>
+          </div>
+        <div class=" col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <div class="routes-images">
+            <div class="routes-gllry">
+              @if(imagePreview!=''){
+                <div class="uploaded-mage">                
+                  <img [src]="imagePreview" />
+                </div>
+              }
+              
+              <mat-card class="upload-card" (click)="fileInput.click()">
+                <mat-card-content>
+                  <mat-icon fontSize="large" class="upload-icon">upload</mat-icon>
+                  <p>Upload Image</p>
+                  <input #fileInput type="file" (change)="onFileChange($event)" accept="image/*" hidden>
+                </mat-card-content>
+              </mat-card>
+            </div>
+          </div>
+          <!-- <div class="example-full-width mb-3">
+            <mat-label>Upload Image</mat-label>
+            <input type="file" class="form-control" accept="images/*" formControlName="image" (change)="onFileChange($event)">
+          </div> -->
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <div class="example-button-row">
+            <button mat-flat-button color="primary" [disabled]="(!categoryForm.valid || isLoading)"
+              (click)="confirmAdd()">
+              <span *ngIf="!isLoading">Save</span>
+              <mat-spinner *ngIf="isLoading" [diameter]="20"></mat-spinner>
+            </button>
+            <button mat-flat-button color="warn" (click)="onNoClick()" tabindex="-1">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

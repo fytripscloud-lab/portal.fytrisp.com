@@ -1,0 +1,158 @@
+/* You can add global styles to this file, and also import other style files */
+span.badge{
+    cursor: pointer;
+}
+img.table-img-prev {
+    max-height: 60px;
+    width: auto;
+}
+.navbar-brand img {
+	vertical-align: top;
+	max-width: 80%;
+}
+.mdc-tooltip--multiline .mat-mdc-tooltip-surface {    
+    max-width: 300px !important;
+}
+.sidebar .menu .list li.sub-active a {
+    text-decoration: none !important;
+    background-color: #f0f3fb;
+}
+.sortable {
+    cursor: pointer;
+  }
+  
+  .sortable::after {
+    font-family: 'Material Icons';
+    content: 'import_export';
+    font-size: 18px;
+    margin-left: 5px;
+    vertical-align: middle;
+    opacity: 0.5;
+  }
+  
+  .sortable:hover::after {
+    opacity: 1;
+  }
+
+  .example-button-row{
+    button{
+      min-width: 100px;
+    }
+  }
+.mat-menu{
+  span{
+    padding-top:10px;
+  }
+}
+.copy-tag {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 5px;
+  color: #fff;
+  padding: 4px 5px 0px;
+
+  .mat-icon {
+      width: auto;
+      height: auto;
+      font-size: 14px;
+      font-weight: bold;
+  }
+}
+.copy-tag:hover{
+  background: #005cbb;
+}
+.add-tag {
+  position: absolute;
+  right: 0;
+  top: 26px;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 5px;
+  color: #fff;
+  padding: 4px 5px 0px;
+
+  .mat-icon {
+      width: auto;
+      height: auto;
+      font-size: 14px;
+      font-weight: bold;
+  }
+}
+.add-tag:hover{
+  background: #005cbb;
+}
+.remove-img:hover{
+  background: #ba1a1a !important;
+}
+header.timepicker__header {
+  height: auto;
+  line-height: 20px;
+}
+span.badge{
+  text-transform: capitalize;
+}
+.destiselect {
+  margin-left: 12px;
+
+  select {
+      background: #fff;
+      height: 45px;
+      padding: 0 15px 0 10px;
+      border: none;
+      max-width: 200px;
+      width: 100%;
+      min-width: 200px;
+      color: rgba(0, 0, 0, 0.54);
+  }
+
+  input {
+      background: #fff;
+      height: 45px;
+      padding: 0 15px 0 10px;
+      border: none;
+      max-width: 200px;
+      width: 100%;
+      min-width: 200px;
+      color: rgba(0, 0, 0, 0.54);
+  }
+}
+
+.serchdate {
+  display: flex !important;
+
+  input {
+      background: #fff;
+      height: 45px;
+      padding: 0 15px 0 10px;
+      border: none;
+      max-width: 1300px;
+      width: 100%;
+      min-width: 130px;
+      color: rgba(0, 0, 0, 0.54);
+      margin-left: 12px;
+  }
+
+}
+.strike{
+  text-decoration: line-through;
+}
+
+.select{
+  margin-left: 10px;
+
+  select{
+      background: #fff;
+      height: 45px;
+      padding: 0 15px 0 10px;
+      border: none;
+      max-width: 200px;
+      width: 100%;
+      min-width: 200px;
+      color: rgba(0, 0, 0, 0.54);
+      font-size: 14px;
+  }
+}
+input:read-only{
+  cursor: no-drop;
+}

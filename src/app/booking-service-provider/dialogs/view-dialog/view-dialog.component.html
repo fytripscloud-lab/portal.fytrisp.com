@@ -1,0 +1,77 @@
+<div class="addContainer">
+    <div class="modalHeader">
+        <div class="editRowModal">
+            <div class="modalHeader clearfix">
+                <div class="modal-about">
+                    <div class="p-t-5 font-17 font-b-500">
+                        {{dialogTitle}}</div>
+                </div>
+            </div>
+        </div>
+        <button mat-icon-button (click)="dialogRef.close()" class="modal-close-button" aria-label="Close dialog">
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+    <div mat-dialog-content class="viewModal">
+        <div class="row mt-3">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                <div class="table-responsive">
+                    <table class="table" border="1">
+                        <tr>
+                            <td>Destination Routes</td>
+                            <td>{{rowData.destination?.name}}</td>
+                        </tr>
+                        <tr>
+                            <td>Service Type</td>
+                            <td>{{rowData.service_provider_type?.name}}</td>
+                        </tr>
+                        <tr>
+                            <td>Provider Name</td>
+                            <td>{{rowData.provider_name}}</td>
+                        </tr>
+                        <tr>
+                            <td>Provider Email</td>
+                            <td>{{rowData.provider_email}}</td>
+                        </tr>
+                        <tr>
+                            <td>Provider Contact No.</td>
+                            <td>{{rowData.country_code+rowData.provider_contact}}</td>
+                        </tr>
+                        <tr>
+                            <td>Provider Alternate Contact No.</td>
+                            <td>{{rowData?.alternate_country_code+rowData?.provider_alternate_contact}}</td>
+                        </tr>
+                        <tr>
+                            <td>Bank Account Number</td>
+                            <td>{{rowData?.bank_account_number}}</td>
+                        </tr>
+                        <tr>
+                            <td>Bank IFSC Code</td>
+                            <td>{{rowData?.bank_ifsc_code}}</td>
+                        </tr>                        
+                        <tr>
+                            <td>Bank Attachment</td>
+                            <td>
+                                @if(rowData.bank_attachment){
+                                <a href="{{rowData.bank_attachment}}" class="btn btn-primary btn-sm" target="_blank">View</a>
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>UPI ID</td>
+                            <td>{{rowData?.upi_id}}</td>
+                        </tr>
+                        <tr>
+                            <td>Description</td>
+                            <td>{{rowData?.description}}</td>
+                        </tr>    
+                        <tr>
+                            <td>Created At</td>
+                            <td>{{rowData.created_at | date:'mediumDate'}}</td>
+                        </tr>                   
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

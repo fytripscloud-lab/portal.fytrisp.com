@@ -1,0 +1,265 @@
+<div class="addContainer">
+  <div class="modalHeader">
+    <div class="editRowModal">
+      <div class="modalHeader clearfix">
+        <div class="modal-about">
+          <div class="p-t-5 font-17 font-b-500">
+            {{dialogTitle}}</div>
+        </div>
+      </div>
+    </div>
+    <button mat-icon-button (click)="dialogRef.close()" class="modal-close-button" aria-label="Close dialog">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div mat-dialog-content>
+    <form class="register-form m-4" [formGroup]="destinationForm">
+      <div class="row">
+        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width mb-3" appearance="outline">
+            <mat-label>Name</mat-label>
+            <input matInput formControlName="name" required>
+            <mat-icon matSuffix matTooltip="Destination location name. Ex: Kashmir" [matTooltipPosition]="'left'">info</mat-icon>
+            <!-- <mat-icon matSuffix>location_on</mat-icon> -->
+            @if (destinationForm.get('name')?.hasError('required')) {
+            <mat-error>
+              Destination name is required
+            </mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width mb-3" appearance="outline">
+            <mat-label>Search Location</mat-label>
+            <input matInput
+                   formControlName="search_location"
+                   #searchInput
+                   autocomplete="off">
+            <!-- <mat-icon matSuffix>location_on</mat-icon> -->
+            <mat-icon matSuffix matTooltip="Select address from dropown." [matTooltipPosition]="'left'">info</mat-icon>
+            @if (destinationForm.get('search_location')?.hasError('required')) {
+              <mat-error>
+                Search location is required
+              </mat-error>
+            }
+          </mat-form-field>
+        </div>
+      </div>
+      <!-- <div class="row">
+        <div class=" col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width mb-3" appearance="outline">
+            <mat-label>House No.</mat-label>
+            <input matInput formControlName="house_no">
+            <mat-icon matSuffix>home</mat-icon>
+            @if (destinationForm.get('house_no')?.hasError('required')) {
+            <mat-error>
+              House number is required
+            </mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width mb-3" appearance="outline">
+            <mat-label>Locality</mat-label>
+            <input matInput formControlName="locality">
+            <mat-icon matSuffix>location_on</mat-icon>
+            @if (destinationForm.get('locality')?.hasError('required')) {
+            <mat-error>
+              Locality is required
+            </mat-error>
+            }
+          </mat-form-field>
+        </div>
+      </div> -->
+      <div class="row">
+        <!-- <div class=" col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width mb-3" appearance="outline">
+            <mat-label>Pincode</mat-label>
+            <input matInput formControlName="pincode">            
+            @if (destinationForm.get('pincode')?.hasError('required')) {
+            <mat-error>
+              Pincode is required
+            </mat-error>
+            }
+          </mat-form-field>
+        </div> -->
+        <div class=" col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <!-- <mat-form-field class="example-full-width mb-3" appearance="outline">
+            <mat-label>Country</mat-label>
+            <mat-icon matSuffix>flag</mat-icon>
+            <input matInput formControlName="country">            
+            @if (destinationForm.get('country')?.hasError('required')) {
+            <mat-error>
+              Country is required
+            </mat-error>
+            }
+          </mat-form-field> -->
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Country</mat-label>
+            <mat-select formControlName="country_id" (selectionChange)="onCountryChange($event)" required>
+              <mat-option>
+                <ngx-mat-select-search 
+                  [formControl]="searchCountry"
+                  placeholderLabel="Search country..."
+                  noEntriesFoundLabel="No matching country found">
+                </ngx-mat-select-search>
+              </mat-option>
+              @for (country of filteredCountry$ | async; track $index) {
+                <mat-option [value]="country?.id">
+                  {{country.name}}
+                </mat-option>
+              }
+            </mat-select>
+            @if (destinationForm.get('country_id')?.hasError('required')) {
+              <mat-error>
+                Country is required
+              </mat-error>
+            }
+          </mat-form-field>
+        </div> 
+        <div class=" col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <!-- <mat-form-field class="example-full-width mb-3" appearance="outline">
+            <mat-label>State</mat-label>
+            <input matInput formControlName="state_id">            
+            @if (destinationForm.get('state')?.hasError('required')) {
+            <mat-error>
+              State is required
+            </mat-error>
+            }
+          </mat-form-field> -->
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>State</mat-label>
+            <mat-select formControlName="state_id" required>
+              <mat-option>
+                <ngx-mat-select-search 
+                  [formControl]="searchState"
+                  placeholderLabel="Search state..."
+                  noEntriesFoundLabel="No matching state found">
+                </ngx-mat-select-search>
+              </mat-option>
+              @for (state of filteredState$ | async; track $index) {
+                <mat-option [value]="state?.id">
+                  {{state.name}}
+                </mat-option>
+              }
+            </mat-select>
+            @if (destinationForm.get('state_id')?.hasError('required')) {
+              <mat-error>
+                State is required
+              </mat-error>
+            }
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <!-- <div class=" col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width mb-3" appearance="outline">
+            <mat-label>City</mat-label>
+            <input matInput formControlName="city">
+            <mat-icon matSuffix>location_city</mat-icon>
+            @if (destinationForm.get('city')?.hasError('required')) {
+            <mat-error>
+              City is required
+            </mat-error>
+            }
+          </mat-form-field>
+        </div> -->
+               
+      </div>
+      <div class="row">
+        <div class=" col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width mb-3" appearance="outline">
+            <mat-label>Meta Title</mat-label>
+            <input matInput formControlName="meta_title">    
+            <mat-icon matSuffix matTooltip="The meta title is a crucial element for SEO and user engagement. It appears as the clickable headline in search engine results and should clearly describe the page's content. Keep it under 60 characters for optimal display, and include relevant keywords to improve visibility. Aim for clarity and relevance, making it enticing for users to click." [matTooltipPosition]="'left'">info</mat-icon>      
+            @if (destinationForm.get('meta_title')?.hasError('required')) {
+            <mat-error>
+              Meta title is required
+            </mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div class=" col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width mb-3" appearance="outline">
+            <mat-label>Meta Keywords</mat-label>
+            <input matInput formControlName="meta_keywords">
+            <mat-icon matSuffix matTooltip="Meta keywords are relevant terms that help search engines understand your page. Use a few targeted keywords, focusing on quality, not quantity." [matTooltipPosition]="'left'">info</mat-icon>
+          </mat-form-field>
+        </div>
+        <div class=" col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width mb-3" appearance="outline">
+            <mat-label>Meta Description</mat-label>
+            <textarea matInput formControlName="meta_description" rows="5"></textarea>
+            <mat-icon matSuffix matTooltip="The meta description is a brief summary of your page's content. Keep it under 160 characters, include key terms, and make it enticing to encourage clicks." [matTooltipPosition]="'left'">info</mat-icon>
+          </mat-form-field>
+        </div>
+        <div class=" col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width mb-3" appearance="outline">
+            <mat-label>Meta Tags</mat-label>
+            <textarea matInput formControlName="meta_tags" rows="10"></textarea>
+            <mat-icon matSuffix matTooltip="Meta tags provide metadata about your webpage, helping search engines understand its content. Include relevant keywords, descriptions, and other essential info for SEO." [matTooltipPosition]="'left'">info</mat-icon>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <div class="d-flex flex-wrap gap-3">
+            <mat-checkbox formControlName="is_next_destination">
+              Next Destination
+            </mat-checkbox>
+            
+            <mat-checkbox formControlName="is_popular_destination">
+              Popular Destination
+            </mat-checkbox>
+            
+            <mat-checkbox formControlName="is_dream_destination">
+              Dream Destination
+            </mat-checkbox>
+            
+            <mat-checkbox formControlName="is_explore_destination">
+              Explore Destination
+            </mat-checkbox>
+          </div>
+        </div>
+        <div class=" col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width mb-3" appearance="outline">
+            <mat-label>Image Alt Tag</mat-label>
+            <input matInput formControlName="image_alt">            
+            <mat-icon matSuffix matTooltip="Alt text (alternative text) is a short description of an image that appears if the image can't be displayed or for accessibility purposes, helping screen readers describe the image to visually impaired users. It also aids in SEO by providing context to search engines." [matTooltipPosition]="'left'">info</mat-icon>
+          </mat-form-field>
+        </div>
+        <div class=" col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <div class="routes-images">
+            <div class="routes-gllry">
+              @if(imagePreview!=''){
+                <div class="uploaded-mage">                
+                  <img [src]="imagePreview" />
+                </div>
+              }
+              
+              <mat-card class="upload-card" (click)="fileInput.click()">
+                <mat-card-content>
+                  <mat-icon fontSize="large" class="upload-icon">upload</mat-icon>
+                  <p>Upload Image</p>
+                  <input #fileInput type="file" (change)="onFileChange($event)" accept="image/*" hidden>
+                </mat-card-content>
+              </mat-card>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row mt-3">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <div class="example-button-row">
+            <button mat-flat-button color="primary" [disabled]="(!destinationForm.valid || isLoading)"
+              (click)="confirmAdd()">
+              <span *ngIf="!isLoading">Save</span>
+              <mat-spinner *ngIf="isLoading" [diameter]="20"></mat-spinner>
+            </button>
+            <button mat-flat-button color="warn" (click)="onNoClick()" tabindex="-1">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

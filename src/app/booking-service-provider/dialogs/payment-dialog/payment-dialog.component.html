@@ -1,0 +1,215 @@
+<div class="addContainer">
+  <div class="modalHeader">
+    <div class="editRowModal">
+      <div class="modalHeader clearfix">
+        <div class="modal-about">
+          <div class="p-t-5 font-17 font-b-500">
+            {{dialogTitle}}</div>
+        </div>
+      </div>
+    </div>
+    <button mat-icon-button (click)="dialogRef.close()" class="modal-close-button" aria-label="Close dialog">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div mat-dialog-content>
+    <form class="register-form m-4" [formGroup]="serviceProviderForm">
+      <div class="row">        
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Destination</mat-label>
+            <mat-select formControlName="destination_id" required>
+              <mat-option>
+                <ngx-mat-select-search 
+                  [formControl]="searchCtrl"
+                  placeholderLabel="Search destination..."
+                  noEntriesFoundLabel="No matching destinations found">
+                </ngx-mat-select-search>
+              </mat-option>
+              
+              @for (destination of filteredDestinations$ | async; track $index) {
+                <mat-option [value]="destination.id">
+                  {{destination.name}}
+                </mat-option>
+              }
+            </mat-select>            
+            @if (serviceProviderForm.get('destination_id')?.hasError('required')) {
+              <mat-error>
+                Destination is required
+              </mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Service Type</mat-label>
+            <mat-select formControlName="service_provider_type_id" required>
+              @for (service of serviceType; track service) {
+                <mat-option [value]="service?.id">{{service?.name}}</mat-option>
+              }
+            </mat-select>            
+            @if (serviceProviderForm.get('service_provider_type_id')?.hasError('required')) {
+              <mat-error>
+                Service type is required
+              </mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width mb-3" appearance="outline">
+            <mat-label>Provider Name</mat-label>
+            <input matInput formControlName="provider_name">            
+            @if (serviceProviderForm.get('provider_name')?.hasError('required')) {
+            <mat-error>
+              Provider name is required
+            </mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width mb-3" appearance="outline">
+            <mat-label>Provider Email</mat-label>
+            <input matInput formControlName="provider_email">            
+            @if (serviceProviderForm.get('provider_email')?.hasError('required')) {
+            <mat-error>
+              Provider email is required
+            </mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <div class="flex gap-4">
+            <div class="w-[100px]">
+              <mat-form-field appearance="outline">                
+                <mat-select class="pl-8" placeholder="Country Code" formControlName="country_code" (closed)="clearFilter()">
+                  <mat-option>
+                    <ngx-mat-select-search
+                      formControlName="filter"
+                      placeholderLabel="Search"
+                      (input)="filter($event)">
+                    </ngx-mat-select-search>
+                  </mat-option>
+                  <mat-option *ngFor="let country of filtered" [value]="country.code">
+                    <div class="flex items-center gap-2" (click)="flag =country.flagUrl">
+                      <div><img class="w-6" [src]="country.flagUrl" alt=""></div>
+                      {{ country.code }}
+                    </div>
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <mat-form-field class="example-full-width mb-3" appearance="outline" required>
+              <mat-label>Provider Contact No.</mat-label>
+              <input matInput formControlName="provider_contact" (keypress)="onlyNumbers($event)"
+              maxlength="15">
+            </mat-form-field>
+          </div>          
+        </div>
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <div class="flex gap-4">
+            <div class="w-[100px]">
+              <mat-form-field appearance="outline">                
+                <mat-select class="pl-8" placeholder="Country Code" formControlName="alternate_country_code" (closed)="clearFilter()">
+                  <mat-option>
+                    <ngx-mat-select-search
+                      formControlName="filter"
+                      placeholderLabel="Search"
+                      (input)="filter($event)">
+                    </ngx-mat-select-search>
+                  </mat-option>
+                  <mat-option *ngFor="let country of filtered" [value]="country.code">
+                    <div class="flex items-center gap-2" (click)="flag =country.flagUrl">
+                      <div><img class="w-6" [src]="country.flagUrl" alt=""></div>
+                      {{ country.code }}
+                    </div>
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <mat-form-field class="example-full-width mb-3" appearance="outline" required>
+              <mat-label>Provider Alternate Contact No.</mat-label>
+              <input matInput formControlName="provider_alternate_contact" (keypress)="onlyNumbers($event)"
+              maxlength="15">
+            </mat-form-field>
+          </div>          
+        </div>
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width mb-3" appearance="outline">
+            <mat-label>Bank Account Number</mat-label>
+            <input matInput formControlName="bank_account_number">            
+            @if (serviceProviderForm.get('bank_account_number')?.hasError('required')) {
+            <mat-error>
+              Bank A/C Number is required
+            </mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width mb-3" appearance="outline">
+            <mat-label>Bank IFSC Code</mat-label>
+            <input matInput formControlName="bank_ifsc_code">            
+            @if (serviceProviderForm.get('bank_ifsc_code')?.hasError('required')) {
+            <mat-error>
+              Bank IFSC code is required
+            </mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width mb-3" appearance="outline">
+            <mat-label>Bank Account Holder</mat-label>
+            <input matInput formControlName="bank_account_holder_name">            
+            @if (serviceProviderForm.get('bank_account_holder_name')?.hasError('required')) {
+            <mat-error>
+              Account holder name is required
+            </mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width mb-3" appearance="outline">
+            <mat-label>UPI ID</mat-label>
+            <input matInput formControlName="upi_id">            
+            @if (serviceProviderForm.get('upi_id')?.hasError('required')) {
+            <mat-error>
+              UPI id is required
+            </mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div class=" col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <div class="routes-images">
+            <h6>Bank Attachment</h6>
+            <input type="file" class="form-control" (change)="onFileSelected($event)" accept="image/*,application/pdf">
+            @if(bankAttachment){
+              <a href="{{bankAttachment}}" class="btn btn-primary btn-sm mt-2" target="_blank">View Attachment</a>
+            }
+          </div>
+        </div>
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width mb-3" appearance="outline">
+            <mat-label>Description</mat-label>
+            <textarea matInput formControlName="description" rows="3"></textarea>            
+            @if (serviceProviderForm.get('description')?.hasError('required')) {
+            <mat-error>
+              Description is required
+            </mat-error>
+            }
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <div class="example-button-row">
+            <button mat-flat-button color="primary" [disabled]="(!serviceProviderForm.valid || isUploading)"
+              (click)="confirmAdd()">
+              <span *ngIf="!isUploading">Save</span>
+              <mat-spinner *ngIf="isUploading" [diameter]="20"></mat-spinner>
+            </button>
+            <button mat-flat-button color="warn" (click)="onNoClick()" tabindex="-1">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

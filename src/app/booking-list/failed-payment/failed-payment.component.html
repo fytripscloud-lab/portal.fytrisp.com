@@ -1,0 +1,165 @@
+<section class="content">
+    <div class="content-block">
+      @for (breadscrum of breadscrums; track breadscrum) {
+        <div class="block-header">
+          <!-- breadcrumb -->
+          <app-breadcrumb [title]="breadscrum.title" [items]="breadscrum.items" [active_item]="breadscrum.active">
+          </app-breadcrumb>
+        </div>
+      }
+      <!-- Basic Table -->
+      <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+          <div class="card">
+            <div class="materialTableHeader">
+              <div class="left">
+                <ul class="header-buttons-left ms-0">
+                  <li class="tbl-search-box">
+                    <label for="search-input"><i class="material-icons search-icon">search</i></label>
+                    <input placeholder="Search" type="text" #filter class="browser-default search-field"
+                      aria-label="Search box" (input)="onSearch(filter.value)">
+                  </li>
+                  <li class="serchdate">
+                    <input type="date" placeholder="Date From" name="from_date" [(ngModel)]="selectParams.from_date" onfocus="this.showPicker()">
+                    <input type="date" placeholder="Date From" name="to_date" [(ngModel)]="selectParams.to_date" onfocus="this.showPicker()">
+                  </li>
+                  <li class="destiselect">
+                    <select 
+                        [(ngModel)]="selectParams.period"
+                        aria-label="Select time period"                        
+                        name="period"
+                        id="period">
+                        <option value="">Select Period</option>
+                        <option value="1">Today</option>
+                        <option value="2">Last 7 Days</option>
+                        <option value="3">Last Month</option>
+                      </select>
+                  </li>
+                  <li class="tbl-header-btn">
+                    <div class="m-l-10" matTooltip="Create Quotation">
+                      <button mat-mini-fab color="primary" (click)="searchData()">
+                        <mat-icon>search</mat-icon>
+                      </button>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              <div class="right">
+                <ul class="tbl-export-btn">
+                  <li class="tbl-header-btn">
+                    <div class="m-l-10" matTooltip="REFRESH">
+                      <button mat-mini-fab color="primary" (click)="refresh()">
+                        <mat-icon>refresh</mat-icon>
+                      </button>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="body table-responsive">
+              @if(isLoading)
+              {
+                <div class="tbl-spinner">
+                  <mat-progress-spinner color="primary" [diameter]="40" mode="indeterminate">
+                  </mat-progress-spinner>
+                </div>
+              }
+              @else {
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Booking ID</th>
+                      <th>Customer Details</th>
+                      <th>Trip Duration</th>
+                      <!-- <th>Route</th> -->
+                      <!-- <th>Room</th> -->
+                       <th>Destination</th>
+                      <th>Travelers</th>
+                      <th>Price</th>
+                      <th>Travel Date</th>
+                      <th>Payment Status</th>
+                      <th class="sortable" (click)="sort('created_at')">Created At
+                        <span *ngIf="sortColumn === 'created_at'">
+                          {{ sortDirection === 'asc' ? '↑' : '↓' }}
+                        </span>
+                      </th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @if(bookingData.length>0){
+                      @for (item of bookingData; track $index) {
+                          <tr>
+                              <th scope="row">{{getRowNumber($index)}}</th>                              
+                              <td>{{item?.order_id}}</td>
+                              <td>
+                                <strong>{{item.full_name}}</strong><br>
+                                {{item.email}}<br>
+                                {{item.country_code+item.mobile_no}}
+                              </td>
+                              <td>{{item?.trip_duration}}</td>
+                              <!-- <td>{{item?.destination_routes}}</td> -->
+                              <!-- <td>{{item?.stay_category}}</td> -->
+                               <td>{{item?.destination_name}}</td>
+                              <td>{{item.traveler_no_of_adult}} Adults<br>{{item.traveler_no_of_child}} Child</td>
+                              <td>
+                                <span class="strike">₹{{item?.main_price || '0.00'}}</span><br>
+                                ₹{{item?.offer_price || '0.00'}}<br>
+                                @if(item?.payment_remaining){
+                                  <span class="badge bg-danger">₹{{item?.payment_remaining || '0.00'}}</span>
+                                }
+                              </td>
+                              <td>{{item.travel_start_date}} to {{item.travel_end_date}}</td>
+                              <td><span class="badge" [ngClass]="getPaymentStatus(item?.payment_status)">{{item?.payment_status}}</span></td>
+                              <td>{{item.created_at | date: 'mediumDate'}}</td>
+                              <td>
+                                <button mat-icon-button [matMenuTriggerFor]="menu" (click)="$event.stopPropagation()">
+                                  <mat-icon>more_vert</mat-icon>
+                                </button>
+                                <mat-menu #menu="matMenu">                                  
+                                  <button mat-menu-item (click)="viewDetails(item)">
+                                    <span>View Details</span>
+                                  </button>
+                                  <button mat-menu-item (click)="sendQuotationPayment(item)">
+                                    <span>Send Payment Link</span>
+                                  </button>
+                                  <button mat-menu-item (click)="cashPayment(item)">
+                                    <span>Manual Payment</span>
+                                  </button>
+                                  <button mat-menu-item (click)="statusLogReport(item)">
+                                    <span>Status Logs</span>
+                                  </button>
+                                </mat-menu> 
+                                <!-- <button mat-icon-button (click)="viewDetails(item)" (click)="$event.stopPropagation()"
+                                  class="tbl-action-btn"  matTooltip="View Details">
+                                  <app-feather-icons [icon]="'eye'" [class]="'tbl-fav-edit'"></app-feather-icons>
+                                </button> -->
+                              </td>
+                          </tr>
+                      }
+                    }
+                    @else{
+                      <tr>
+                        <td class="text-center" colspan="11">No data found</td>
+                      </tr>
+                    } 
+                  </tbody>
+                </table>
+                <mat-paginator 
+                  #paginator
+                  [length]="totalItems"
+                  [pageIndex]="currentPage"
+                  [pageSize]="pageSize"
+                  [pageSizeOptions]="[10, 25, 50, 100]"
+                  (page)="onPageChange($event)">
+                </mat-paginator>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- #END# Basic Table -->
+    </div>
+  </section>
+  

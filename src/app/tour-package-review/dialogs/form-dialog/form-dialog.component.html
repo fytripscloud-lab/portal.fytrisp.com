@@ -1,0 +1,93 @@
+<div class="addContainer">
+  <div class="modalHeader">
+    <div class="editRowModal">
+      <div class="modalHeader clearfix">
+        <div class="modal-about">
+          <div class="p-t-5 font-17 font-b-500">
+            {{dialogTitle}}</div>
+        </div>
+      </div>
+    </div>
+    <button mat-icon-button (click)="dialogRef.close()" class="modal-close-button" aria-label="Close dialog">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div mat-dialog-content>
+    <form class="register-form m-4" [formGroup]="reviewForm">
+      <div class="row">
+        <div class="col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Select Package</mat-label>
+            <mat-select formControlName="tour_package_id" required>
+              <mat-option>
+                <ngx-mat-select-search 
+                  [formControl]="searchPackage"
+                  placeholderLabel="Search packages..."
+                  noEntriesFoundLabel="No matching package found">
+                </ngx-mat-select-search>
+              </mat-option>
+              
+              @for (package of filteredPackage$ | async; track $index) {
+                <mat-option [value]="package.id">
+                  {{package.package_name}}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Rating</mat-label>
+            <mat-select formControlName="rating" required>
+              <mat-option value="1">1</mat-option>
+              <mat-option value="2">2</mat-option>
+              <mat-option value="3">3</mat-option>
+              <mat-option value="4">4</mat-option>
+              <mat-option value="5">5</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width mb-3" appearance="outline">
+            <mat-label>Review Text</mat-label>
+            <textarea matInput formControlName="review_text" rows="5"></textarea>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="routes-gllry">
+
+            <div class="uploaded-mage" *ngFor="let preview of imagePreviews; let i=index;">
+              <a href="javascript:void(0);" class="remove-img" (click)="removeImage(preview, i)" matTooltip="Remove Image" [matTooltipPosition]="'left'"><mat-icon class="close-icon">close</mat-icon></a>
+              <img [src]="preview.img" />
+            </div>
+
+            <mat-card class="upload-card" (click)="fileInput.click()">
+              <mat-card-content>
+                <mat-icon fontSize="large" class="upload-icon">upload</mat-icon>
+                <p>Upload Photos</p>
+                <input #fileInput type="file" (change)="onFileSelected($event)" accept="image/*" multiple hidden>
+              </mat-card-content>
+            </mat-card>
+
+          </div>
+        </div>
+               
+      </div>
+      <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <div class="example-button-row">
+            <button mat-flat-button color="primary" [disabled]="(!reviewForm.valid || isLoading)"
+              (click)="confirmAdd()">
+              <span *ngIf="!isLoading">Save</span>
+              <mat-spinner *ngIf="isLoading" [diameter]="20"></mat-spinner>
+            </button>
+            <button mat-flat-button color="warn" (click)="onNoClick()" tabindex="-1">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

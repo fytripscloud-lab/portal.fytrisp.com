@@ -1,0 +1,52 @@
+<section class="content">
+    <div class="content-block">
+      @for (breadscrum of breadscrums; track breadscrum) {
+        <div class="block-header">
+          <!-- breadcrumb -->
+          <app-breadcrumb [title]="breadscrum.title" [items]="breadscrum.items" [active_item]="breadscrum.active">
+          </app-breadcrumb>
+        </div>
+      }
+      <!-- Basic Table -->
+      <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="body table-responsive">
+              @if(isLoading)
+              {
+                <div class="tbl-spinner">
+                  <mat-progress-spinner color="primary" [diameter]="40" mode="indeterminate">
+                  </mat-progress-spinner>
+                </div>
+              }
+              @else {
+                <table class="table">
+                  <thead>
+                    <tr>                      
+                      <th>Menu Name</th>
+                      <th class="text-center">Can View</th>                      
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @if(menuLists.length>0){
+                      @for (menu of menuLists; track $index) {
+                          <tr (click)="toggleCheckbox($event)">
+                              <td>{{menu?.name}}</td>
+                              <td align="center"><input type="checkbox" matInput></td>
+                          </tr>
+                      }
+                    }
+                    @else{
+                      <tr>
+                        <td class="text-center" colspan="7">No data found</td>
+                      </tr>
+                    } 
+                  </tbody>
+                </table>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- #END# Basic Table -->
+  </section>
+  

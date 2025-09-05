@@ -1,0 +1,84 @@
+<div class="addContainer">
+  <div class="modalHeader">
+    <div class="editRowModal">
+      <div class="modalHeader clearfix">
+        <div class="modal-about">
+          <div class="p-t-5 font-17 font-b-500">
+            {{dialogTitle}}</div>
+        </div>
+      </div>
+    </div>
+    <button mat-icon-button (click)="dialogRef.close()" class="modal-close-button" aria-label="Close dialog">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div mat-dialog-content>
+    <form class="register-form m-4" [formGroup]="quotationForm">
+      <div class="row">
+        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width mb-3" appearance="outline">
+            <mat-label>Rea</mat-label>
+            <input matInput formControlName="offer_price" required>            
+          </mat-form-field>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width mb-3" appearance="outline" required>
+            <mat-label>Full Name</mat-label>
+            <input matInput formControlName="full_name" required>            
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class=" col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width mb-3" appearance="outline" required>
+            <mat-label>Mobile No.</mat-label>
+            <input matInput formControlName="mobile_no">
+          </mat-form-field>
+        </div>
+        <div class=" col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width mb-3" appearance="outline" required>
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="email">
+          </mat-form-field>
+        </div>
+        
+      </div>
+      <div class="row">
+        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width mb-3" appearance="outline">
+            <mat-label>Travel Start Date</mat-label>
+            <input matInput formControlName="travel_start_date" required>
+          </mat-form-field>
+        </div>
+        <div class=" col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width mb-3" appearance="outline">
+            <mat-label>Traveler Adult</mat-label>
+            <input matInput formControlName="traveler_no_of_adult">
+          </mat-form-field>
+        </div>
+        <div class=" col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width mb-3" appearance="outline">
+            <mat-label>Traveler Child</mat-label>
+            <input matInput formControlName="traveler_no_of_child">
+          </mat-form-field>
+        </div>
+        <div class=" col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width mb-3" appearance="outline">
+            <mat-label>Traveler Infrant</mat-label>
+            <input matInput formControlName="traveler_no_of_infant">
+          </mat-form-field>
+        </div>
+      </div>
+      
+      <div class="row mt-3">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <div class="example-button-row">
+            <button mat-flat-button color="primary" [disabled]="(!quotationForm.valid || isLoading)"
+              (click)="confirmUpdate()">{{ isLoading?'Saving...':'Save' }}</button>
+            <button mat-flat-button color="warn" (click)="onNoClick()" tabindex="-1">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

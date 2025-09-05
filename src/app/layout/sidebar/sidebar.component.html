@@ -1,0 +1,131 @@
+<div>
+  <!-- Left Sidebar -->
+  <aside id="leftsidebar" class="sidebar" (mouseenter)="mouseHover()" (mouseleave)="mouseOut()">
+    <!-- Menu -->
+    <div class="menu">      
+        <ul class="list">
+          <li class="sidebar-user-panel">
+            <div class="user-panel">
+              <div class=" image">
+                <img src="assets/images/favicon.png" class="img-circle user-img-circle" alt="User Image" />
+              </div>
+            </div>
+            <div class="profile-usertitle">
+              <div class="sidebar-userpic-name">{{userInfo?.name}} </div>
+              @if(userInfo?.name==''){
+                <div class="profile-usertitle-job ">Admin </div>
+              }              
+            </div>
+            <!-- <div class="sidebar-userpic-btn">
+              <a mat-icon-button disabled routerLink="extra-pages/profile" matTooltip="Profile"
+                [matTooltipPosition]="'above'">
+                <i class="material-icons-outlined">account_circle</i>
+              </a>
+              <a mat-icon-button disabled routerLink="email/inbox" matTooltip="Email" [matTooltipPosition]="'above'">
+                <i class="material-icons-outlined">mark_email_unread</i>
+              </a>
+              <a mat-icon-button disabled routerLink="calendar" matTooltip="Calendar" [matTooltipPosition]="'above'">
+                <i class="material-icons-outlined">event</i>
+              </a>
+              <a mat-icon-button disabled routerLink="authentication/locked" matTooltip="Lock"
+                [matTooltipPosition]="'above'">
+                <i class="material-icons-outlined">lock</i>
+              </a>
+            </div> -->
+          </li>
+          <!-- Top Most level menu -->
+          @for (sidebarItem of sidebarItems; track sidebarItem) {
+            @if(checkMenuVisible(sidebarItem.path) || checkSubMenuVisible(sidebarItem.submenu)){
+            <li
+              [routerLinkActive]="sidebarItem.submenu.length !== 0 ? 'active' : 'active-top'">
+              @if (sidebarItem.groupTitle === true) {
+                <div class="header">{{sidebarItem.title}}</div>
+              }
+              @if (!sidebarItem.groupTitle;) {
+                <a [routerLink]="sidebarItem.class === '' ? [sidebarItem.path] : null"
+                  [ngClass]="[sidebarItem.class]" (click)="callToggleMenu($event, sidebarItem.submenu.length)"
+                  class="menu-top">
+                  <i [ngClass]="[sidebarItem.iconType]">{{sidebarItem.icon}}</i>
+                  <span class="hide-menu">{{sidebarItem.title}}
+                  </span>
+                  @if(sidebarItem.path=='users'){                    
+                    <span [ngClass]="'badge bg-orange sidebar-badge float-end'">{{dashboardData?.card_count?.user_count}}</span>
+                   }
+                   @if(sidebarItem.path=='quotation-request'){                    
+                    <span [ngClass]="'badge bg-orange sidebar-badge float-end'">{{dashboardData?.card_count?.quotation_count}}</span>
+                   }
+                  @if (sidebarItem.badge !== '' ) {
+                    <span [ngClass]="[sidebarItem.badgeClass]">{{sidebarItem.badge}}</span>
+                  }
+                </a>
+              }
+              <!-- First level menu -->
+              @if (sidebarItem.submenu.length > 0) {
+                <ul class="ml-menu">
+                  @for (sidebarSubItem1 of sidebarItem.submenu; track sidebarSubItem1) {
+                    @if(checkMenuVisible(sidebarSubItem1.path)){
+                    <li
+                      [routerLinkActive]="sidebarSubItem1.submenu.length > 0 ? '' : 'sub-active'">
+                      <a [routerLink]="sidebarSubItem1.submenu.length > 0 ? null : [sidebarSubItem1.path]"
+                        (click)="callToggleMenu($event,sidebarSubItem1.submenu.length)" [ngClass]="[sidebarSubItem1.class]">
+                        {{sidebarSubItem1.title}}
+                        @if(sidebarSubItem1.path=='query-leads/open'){
+                          <span [ngClass]="'badge bg-orange sidebar-badge float-end'">{{dashboardData?.card_count?.open_lead_count}}</span>
+                         }
+                         @if(sidebarSubItem1.path=='query-leads/canceled'){
+                          <span [ngClass]="'badge bg-orange sidebar-badge float-end'">{{dashboardData?.card_count?.canceled_lead_count}}</span>                           
+                          }
+                        @if(sidebarSubItem1.path=='booking-list-partial'){
+                          <span [ngClass]="'badge bg-orange sidebar-badge float-end'">{{dashboardData?.card_count?.partial_payment_booking_count}}</span>                           
+                        }
+                        @if(sidebarSubItem1.path=='booking-list-partial'){
+                          <span [ngClass]="'badge bg-orange sidebar-badge float-end'">{{dashboardData?.card_count?.partial_payment_booking_count}}</span>                           
+                        }
+                        @if(sidebarSubItem1.path=='booking-list-success'){
+                          <span [ngClass]="'badge bg-orange sidebar-badge float-end'">{{dashboardData?.card_count?.success_booking_count}}</span>                           
+                        }
+                      </a>
+                      <!-- Second level menu -->
+                      @if (sidebarSubItem1.submenu.length > 0) {
+                        <ul class="ml-menu-2">
+                          @for (sidebarSubItem2 of sidebarSubItem1.submenu; track sidebarSubItem2) {
+                            <li
+                              [routerLinkActive]="sidebarSubItem2.submenu.length > 0 ? '' : 'active'">
+                              <a [routerLink]="sidebarSubItem2.submenu.length > 0 ? null : [sidebarSubItem2.path]"
+                                (click)="callToggleMenu($event,sidebarSubItem2.submenu.length)"
+                                [ngClass]="[sidebarSubItem2.class]">
+                                {{sidebarSubItem2.title}}                                
+                              </a>
+                              <!-- Third level menu -->
+                              @if (sidebarSubItem2.submenu.length > 0) {
+                                <ul class="ml-menu-3">
+                                  @for (sidebarSubItem3 of sidebarSubItem2.submenu; track sidebarSubItem3) {
+                                    <li
+                                      [routerLinkActive]="sidebarSubItem3.submenu.length > 0 ? '' : 'active'">
+                                      <a [routerLink]="sidebarSubItem3.submenu.length > 0 ? null : [sidebarSubItem3.path]"
+                                        (click)="callToggleMenu($event,sidebarSubItem3.submenu.length)"
+                                        [ngClass]="[sidebarSubItem3.class]">
+                                        {{sidebarSubItem3.title}}                                        
+                                      </a>
+                                    </li>
+                                  }
+                                </ul>
+                              }
+                            </li>
+                          }
+                        </ul>
+                      }
+                    </li>
+                  }
+                  }
+                </ul>
+              }
+            </li>
+          }
+          }
+        </ul>      
+    </div>
+    <!-- #Menu -->
+  </aside>
+  <!-- #END# Left Sidebar -->
+</div>

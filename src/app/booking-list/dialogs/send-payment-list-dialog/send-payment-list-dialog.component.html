@@ -1,0 +1,107 @@
+<section>
+    <div class="content-block">
+      <!-- Basic Table -->
+      <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+          <div class="card">
+            <div class="materialTableHeader">
+              <div class="p-t-5 font-17 font-b-500 p-l-10">
+                  {{dialogTitle}}</div>              
+              <div class="right">
+                <ul class="tbl-export-btn">
+                  <li class="tbl-header-btn">
+                    <div class="m-l-10" matTooltip="Create Quotation" (click)="serviceProviderPayment(quotation)">
+                      <button mat-mini-fab color="primary">
+                        <mat-icon>add</mat-icon>
+                      </button>
+                    </div>
+                  </li>
+                  <li class="tbl-header-btn">
+                    <div class="m-l-10" matTooltip="REFRESH">
+                      <button mat-mini-fab color="primary" (click)="refresh()">
+                        <mat-icon>refresh</mat-icon>
+                      </button>
+                    </div>                    
+                  </li>
+                  <li class="tbl-header-btn">
+                    <div class="m-l-10" matTooltip="Close">
+                      <button mat-mini-fab color="primary" (click)="dialogRef.close()">
+                        <mat-icon>close</mat-icon>
+                      </button>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="body table-responsive">
+              @if(isLoading)
+              {
+                <div class="tbl-spinner">
+                  <mat-progress-spinner color="primary" [diameter]="40" mode="indeterminate">
+                  </mat-progress-spinner>
+                </div>
+              }
+              @else {
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Provider Name</th>
+                      <th>Service Type</th>
+                      <th>Deal Amount</th>
+                      <th>Paid Amount</th>
+                      <th>Remaining Amount</th>
+                      <th>Description</th>
+                      <th>Payment Date</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @if(paymentList.length>0){
+                      @for (item of paymentList; track $index) {
+                          <tr>
+                              <th scope="row">{{getRowNumber($index)}}</th> 
+                              <td>{{item?.service_provider?.provider_name}}</td>
+                              <td>{{item?.service_provider?.service_provider_type?.name}}</td>
+                              <td>Rs. {{item?.deal_amount}}</td>
+                              <td>Rs. {{item?.paid_amount}}</td>                              
+                              <td>Rs. {{item?.remaining_amount}}</td>
+                              <td>{{ item?.description }}</td>
+                              <td>{{item.payment_at | date: 'mediumDate'}}</td>
+                              <td>
+                                <button mat-icon-button [matMenuTriggerFor]="menu" (click)="$event.stopPropagation()">
+                                  <mat-icon>more_vert</mat-icon>
+                                </button>
+                                <mat-menu #menu="matMenu">
+                                  <button mat-menu-item (click)="editServiceProviderPayment(item)">
+                                      <span>Edit</span>
+                                  </button>
+                                  @if(item?.remaining_amount>0){
+                                    <button mat-menu-item (click)="payDuePayment(item)">
+                                      <span>Pay Due Payment</span>
+                                    </button>
+                                  }
+                                  <button mat-menu-item (click)="paymentLogs(item?.payment_history)">
+                                      <span>Payment Logs</span>
+                                    </button>
+                                </mat-menu> 
+                              </td>
+                          </tr>
+                      }
+                    }
+                    @else{
+                      <tr>
+                        <td class="text-center" colspan="10">No data found</td>
+                      </tr>
+                    } 
+                  </tbody>
+                </table>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- #END# Basic Table -->
+    </div>
+  </section>
+  

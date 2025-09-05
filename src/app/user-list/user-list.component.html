@@ -1,0 +1,132 @@
+<section class="content">
+    <div class="content-block">
+      @for (breadscrum of breadscrums; track breadscrum) {
+        <div class="block-header">
+          <!-- breadcrumb -->
+          <app-breadcrumb [title]="breadscrum.title" [items]="breadscrum.items" [active_item]="breadscrum.active">
+          </app-breadcrumb>
+        </div>
+      }
+      <!-- Basic Table -->
+      <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+          <div class="card">
+            <div class="materialTableHeader">
+              <div class="left">
+                <ul class="header-buttons-left ms-0">
+                  <li class="tbl-search-box">
+                    <label for="search-input"><i class="material-icons search-icon">search</i></label>
+                    <input placeholder="Search" type="text" #filter class="browser-default search-field"
+                      aria-label="Search box" (input)="onSearch(filter.value)">
+                  </li>
+                </ul>
+              </div>
+              <div class="right">
+                <ul class="tbl-export-btn">
+                  <!-- <li class="tbl-header-btn">
+                    <div class="m-l-10" matTooltip="Create User Profile">
+                      <button mat-mini-fab color="primary" (click)="addUserDialog()">
+                        <mat-icon>add</mat-icon>
+                      </button>
+                    </div>
+                  </li> -->
+                  <li class="tbl-header-btn">
+                    <div class="m-l-10" matTooltip="REFRESH">
+                      <button mat-mini-fab color="primary" (click)="refresh()">
+                        <mat-icon>refresh</mat-icon>
+                      </button>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="body table-responsive">
+              @if(isLoading)
+              {
+                <div class="tbl-spinner">
+                  <mat-progress-spinner color="primary" [diameter]="40" mode="indeterminate">
+                  </mat-progress-spinner>
+                </div>
+              }
+              @else {
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Name</th>
+                      <th>Email</th>
+                      <th>Mobile Number</th>
+                      <th>Address</th>
+                      <th>State</th>
+                      <th>City</th>
+                      <th class="sortable text-center" (click)="sort('is_active')">Status
+                        <span *ngIf="sortColumn === 'is_active'">
+                          {{ sortDirection === 'asc' ? '↑' : '↓' }}
+                        </span>
+                      </th>
+                      <th class="sortable" (click)="sort('created_at')">Created At
+                        <span *ngIf="sortColumn === 'created_at'">
+                          {{ sortDirection === 'asc' ? '↑' : '↓' }}
+                        </span>
+                      </th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @if(pageListData.length>0){
+                      @for (item of pageListData; track $index) {
+                          <tr>
+                              <th scope="row">{{getRowNumber($index)}}</th>
+                              <!-- <td><img [src]="item.file_path" (error)="handleImageError($event)" class="table-img-prev" /></td> -->
+                              <td>{{item?.name}}</td>
+                              <td>{{item.email}}</td>
+                              <td>{{item.mobile_number?item.country_mobile_code+item.mobile_number:''}}</td>
+                              <td>{{item?.search_address}}</td>
+                              <td>{{item?.state?.name}}</td>
+                              <td>{{item?.city?.name}}</td>
+                              <td>
+                                <div class="text-center" matTooltip="Update Status">
+                                @if (item.status=='active') {                                  
+                                    <span class="badge badge-solid-green" (click)="changeStatus(item.id, false)">
+                                      Active</span>                                  
+                                  }
+                                  @else {                                  
+                                    <span class="badge badge-solid-red" (click)="changeStatus(item.id, true)">
+                                      Inactive</span>                                  
+                                  }
+                                </div>
+                              </td>
+                              <td>{{item.created_at | date: 'mediumDate'}}</td>
+                              <td>
+                                <button mat-icon-button (click)="getLoginHistory(item)" (click)="$event.stopPropagation()"
+                                  class="tbl-action-btn" title="Login History" matTooltip="View Details">
+                                  <app-feather-icons [icon]="'clock'" [class]="'tbl-fav-edit'"></app-feather-icons>
+                                </button>
+                              </td>
+                          </tr>
+                      }
+                    }
+                    @else{
+                      <tr>
+                        <td class="text-center" colspan="7">No data found</td>
+                      </tr>
+                    } 
+                  </tbody>
+                </table>
+                <mat-paginator 
+                  #paginator
+                  [length]="totalItems"
+                  [pageIndex]="currentPage"
+                  [pageSize]="pageSize"
+                  [pageSizeOptions]="[10, 25, 50, 100]"
+                  (page)="onPageChange($event)">
+                </mat-paginator>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- #END# Basic Table -->
+    </div>
+  </section>
+  

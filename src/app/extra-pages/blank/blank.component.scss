@@ -1,0 +1,344 @@
+.all-days-information {
+    margin: 15px 0;
+
+    .mat-expansion-panel {
+        margin: 10px 0;
+        border-radius: 10px;
+        box-shadow: 0px 0px 1px -2px rgba(0, 0, 0, 0.2), 0px 1px 2px 0px rgba(0, 0, 0, 0.14), 0px 0px 5px 0px rgba(0, 0, 0, 0.12);
+    }
+}
+
+::ng-deep .mat-vertical-content {
+    padding-top: 10px !important;
+}
+
+.from-row {
+    display: flex;
+    gap: 15px;
+    justify-content: space-between;
+}
+
+.facility-icon {
+    max-width: 22px;
+}
+
+::ng-deep div.mat-mdc-select-panel {
+    background-color: #fff !important;
+}
+
+
+.inclusion-repet {
+    display: flex;
+    gap: 15px;
+}
+
+.add-input-btn {
+    display: flex;
+    justify-content: end;
+    margin-bottom: 15px;
+
+    button {
+        display: flex;
+        align-items: center;
+        background: #2d72ee;
+        box-shadow: none;
+        border: none;
+        color: #fff;
+        padding: 10px;
+        border-radius: 5px;
+
+        &:hover {
+            background: #f4683d;
+        }
+    }
+}
+
+.routes-images {
+    margin-bottom: 12px;
+}
+
+.routes-gllry {
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    padding: 15px;
+    margin: 0 0 20px;
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+
+}
+
+
+
+.upload-card {
+    width: 130px;
+    height: 130px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    border: 1px dashed #7c7db3;
+    cursor: pointer;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+}
+
+.upload-card:hover {
+    border-color: #3f51b5;
+    background-color: #f3f3f3;
+}
+
+.upload-card p {
+    color: #555;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+
+.uploaded-mage {
+    width: 130px;
+    height: 130px;
+    background-color: #f9f9f9;
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+}
+
+.remove-img {
+    position: absolute;
+    right: 0;
+    top: 0;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 5px;
+    color: #fff;
+    padding: 4px 5px 0px;
+
+    .mat-icon {
+        width: auto;
+        height: auto;
+        font-size: 14px;
+        font-weight: bold;
+    }
+}
+
+
+
+.tranfer-detals-sec {
+    padding: 15px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 0px 8px 0px;
+    margin-bottom: 20px;
+}
+
+.activity-detals-sec {
+    padding: 15px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 0px 8px 0px;
+    margin-bottom: 20px;
+
+    .routes-gllry {
+        box-shadow: none;
+        padding: 0;
+    }
+}
+
+.days-heding {
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    a {
+        display: inline-flex;
+        background: #000;
+        width: 30px;
+        height: 30px;
+        border-radius: 100%;
+        justify-content: center;
+        align-items: center;
+
+        .mat-icon {
+            width: auto;
+            height: auto;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 600;
+        }
+    }
+}
+
+
+.eprence-label {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    margin-bottom: 5px;
+
+    border: 1px dashed #7c7db3;
+    border-radius: 3px;
+    position: relative;
+    max-width: 100%;
+    margin-top: 5px;
+    padding: 26px 20px 30px;
+    transition: 0.2s;
+
+    .upload-card {
+        flex: 0 0 150px;
+        border: none;
+    }
+}
+
+.close-btn{
+    display: inline-flex;
+    background: #f4683d;
+    width: 28px;
+    height: 28px;
+    border-radius: 100%;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    right: -8px;
+    top: -8px;
+
+    .mat-icon {
+        width: auto;
+        height: auto;
+        color: #fff;
+        font-size: 14px;
+        font-weight: 600;
+    }
+}
+
+
+
+.add-button-sec{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin: 10px 0 15px;
+
+    a{
+        padding: 8px 15px;
+        background: #f4683d;
+        color: #fff;
+        font-size: 15px;
+        border-radius: 5px;
+        display: inline-flex;
+
+        &:hover{
+            background: #2d72ee;
+        }
+    }
+}
+
+
+.hotels-label {
+    margin-bottom: 5px;
+
+    border: 1px dashed #7c7db3;
+    border-radius: 3px;
+    position: relative;
+    max-width: 100%;
+    margin-top: 5px;
+    padding: 26px 20px 30px;
+    transition: 0.2s;
+
+}
+
+
+
+
+.via-hhalt{
+    display: flex;
+    gap: 15px;
+    align-items: baseline;
+}
+
+.trip-highlit-sec{
+    margin-bottom: 30px;
+
+
+::ng-deep .NgxEditor__Content{
+    min-height: 300px;
+}
+
+}
+
+
+
+
+
+
+
+.roomtype-list {
+	border: 1px solid #e3e3e3;
+	border-radius: 8px;
+	margin: 10px 0;
+	overflow: hidden;
+}
+.roomtype-list .roomname-label{
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 10px 15px;
+	background: #f1f6ff;
+}
+
+.roomtype-list .roomname-label .roomstndrd{
+	font-size: 16px;
+	color: #000;
+}
+
+.roomtype-list .roomname-label .roomupdate a {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 32px;
+	height: 32px;
+	background: #fff;
+	border-radius: 100%;
+	box-shadow: #63636333 0 2px 8px;
+	color: #2d72ee;
+	margin: 2px 5px;
+	font-size: 16px;
+}
+.roomtype-list .roomname-label .roomupdate a:hover {
+	color: #f3673c;
+}
+
+.roomtype-list ul{
+	padding: 15px;
+	margin: 0;
+}
+
+.roomtype-list ul li{
+	font-size: 14px;
+	color: #333;
+	display: inline-flex;
+  align-items: center;
+
+  &:last-child{
+    &::after{
+        display: none;
+    }
+  }
+}
+
+.roomtype-list ul li::after {
+	content: "";
+	margin: 0 9px;
+	font-size: 0;
+    border-left: 7px solid #a2a2a2;
+    border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+}
+
+.roomtype-list .roomname-label .roomupdate a .mat-icon{
+	width: auto;
+	height: auto;
+	font-size: 15px;
+}

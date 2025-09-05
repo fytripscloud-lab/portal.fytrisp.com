@@ -1,0 +1,89 @@
+<div class="addContainer">
+    <div class="modalHeader">
+        <div class="editRowModal">
+            <div class="modalHeader clearfix">
+                <div class="modal-about">
+                    <div class="p-t-5 font-17 font-b-500">
+                        {{dialogTitle}}</div>
+                </div>
+            </div>
+        </div>
+        <button mat-icon-button (click)="dialogRef.close()" class="modal-close-button" aria-label="Close dialog">
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+    <div mat-dialog-content class="viewModal">
+        <div class="row mt-3">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                <div class="table-responsive">
+                    <table class="table" border="1">
+                        <tr>
+                            <td>Package</td>
+                            <td>{{quotation.tour_package_name}}</td>
+                        </tr>
+                        <tr>
+                            <td>Trip Duration</td>
+                            <td>{{quotation.trip_duration}}</td>
+                        </tr>
+                        <tr>
+                            <td>Destination Routes</td>
+                            <td>{{quotation.destination_routes}}</td>
+                        </tr>
+                        <tr>
+                            <td>Stay Category</td>
+                            <td>{{quotation.stay_category}}</td>
+                        </tr>
+                        <tr>
+                            <td>Main Price</td>
+                            <td>{{quotation.main_price}}</td>
+                        </tr>
+                        <tr>
+                            <td>Package Price</td>
+                            <td>{{quotation.offer_price}}</td>
+                        </tr>
+                        <tr>
+                            <td>Customer Name</td>
+                            <td>{{quotation.full_name}}</td>
+                        </tr>
+                        <tr>
+                            <td>Email</td>
+                            <td>{{quotation.email}}</td>
+                        </tr>
+                        <tr>
+                            <td>Mobile Number</td>
+                            <td>{{quotation.country_code+quotation.mobile_no}}</td>
+                        </tr>
+                        <tr>
+                            <td>Travel Start Date</td>
+                            <td>{{quotation.travel_start_date}}</td>
+                        </tr>
+                        <tr>
+                            <td>Travel End Date</td>
+                            <td>{{quotation.travel_end_date}}</td>
+                        </tr>
+                        <tr>
+                            <td>Travel Counter</td>
+                            <td>{{quotation.travel_counter}}</td>
+                        </tr>
+                        <tr>
+                            <td>Adult</td>
+                            <td>{{quotation.traveler_no_of_adult}}</td>
+                        </tr>
+                        <tr>
+                            <td>Child</td>
+                            <td>{{quotation.traveler_no_of_child}}</td>
+                        </tr>
+                        <tr>
+                            <td>Infant</td>
+                            <td>{{quotation.traveler_no_of_infant}}</td>
+                        </tr>
+                        <tr>
+                            <td>Messages</td>
+                            <td>{{quotation.messages}}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

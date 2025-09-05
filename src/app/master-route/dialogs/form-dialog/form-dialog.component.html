@@ -1,0 +1,114 @@
+<div class="addContainer">
+  <div class="modalHeader">
+    <div class="editRowModal">
+      <div class="modalHeader clearfix">
+        <div class="modal-about">
+          <div class="p-t-5 font-17 font-b-500">
+            {{dialogTitle}}</div>
+        </div>
+      </div>
+    </div>
+    <button mat-icon-button (click)="dialogRef.close()" class="modal-close-button" aria-label="Close dialog">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div mat-dialog-content>
+    <form class="register-form m-4" [formGroup]="masterRouteForm">
+      <div class="row">        
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Destination</mat-label>
+            <mat-select formControlName="destination_id" required>
+              <mat-option>
+                <ngx-mat-select-search 
+                  [formControl]="searchCtrl"
+                  placeholderLabel="Search destination..."
+                  noEntriesFoundLabel="No matching destinations found">
+                </ngx-mat-select-search>
+              </mat-option>
+              
+              @for (destination of filteredDestinations$ | async; track $index) {
+                <mat-option [value]="destination.id">
+                  {{destination.name}}
+                </mat-option>
+              }
+            </mat-select>
+            <mat-icon matSuffix matTooltip="Select destination from dropdown." [matTooltipPosition]="'left'">info</mat-icon>
+            @if (masterRouteForm.get('destination_id')?.hasError('required')) {
+              <mat-error>
+                Destination is required
+              </mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width mb-3" appearance="outline">
+            <mat-label>Route Name</mat-label>
+            <input matInput formControlName="route_name">
+            <mat-icon matSuffix matTooltip="Type route name for selected destination." [matTooltipPosition]="'left'">info</mat-icon>
+            @if (masterRouteForm.get('route_name')?.hasError('required')) {
+            <mat-error>
+              Route name is required
+            </mat-error>
+            }
+          </mat-form-field>
+        </div> 
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width mb-3" appearance="outline">
+            <mat-label>Search Location</mat-label>
+            <input matInput
+                   formControlName="search_location"
+                   #searchInput
+                   autocomplete="off">
+            <!-- <mat-icon matSuffix>location_on</mat-icon> -->
+            @if (masterRouteForm.get('search_location')?.hasError('required')) {
+              <mat-error>
+                Search location is required
+              </mat-error>
+            }
+          </mat-form-field>
+        </div>
+           
+        <div class=" col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <div class="routes-images">
+
+            <h6>Uploads Routes images</h6>
+
+            <div class="routes-gllry">
+
+              <div class="uploaded-mage" *ngFor="let preview of imagePreviews; let i=index;">
+                <a href="javascript:void(0);" class="remove-img" (click)="removeImage(preview, i)" matTooltip="Remove Image" [matTooltipPosition]="'left'"><mat-icon class="close-icon">close</mat-icon></a>
+                @if(preview?.id){
+                <a href="javascript:void(0);" class="add-tag" (click)="addImageTag(preview)" matTooltip="Add Image Alt Tag" [matTooltipPosition]="'left'"><mat-icon>add</mat-icon></a>
+                }
+                <img [src]="preview.img" />
+              </div>
+
+              <mat-card class="upload-card" (click)="fileInput.click()">
+                <mat-card-content>
+                  <mat-icon fontSize="large" class="upload-icon">upload</mat-icon>
+                  <p>Upload Photos</p>
+                  <input #fileInput type="file" (change)="onFileSelected($event)" accept="image/*" multiple hidden>
+                </mat-card-content>
+              </mat-card>
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <div class="example-button-row">
+            <button mat-flat-button color="primary" [disabled]="(!masterRouteForm.valid || isUploading)"
+              (click)="confirmAdd()">
+              <span *ngIf="!isUploading">Save</span>
+              <mat-spinner *ngIf="isUploading" [diameter]="20"></mat-spinner>
+            </button>
+            <button mat-flat-button color="warn" (click)="onNoClick()" tabindex="-1">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

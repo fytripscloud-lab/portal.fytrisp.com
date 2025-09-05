@@ -1,0 +1,140 @@
+<div class="addContainer">
+  <div class="modalHeader">
+    <div class="editRowModal">
+      <div class="modalHeader clearfix">
+        <div class="modal-about">
+          <div class="p-t-5 font-17 font-b-500">
+            {{dialogTitle}}</div>
+        </div>
+      </div>
+    </div>
+    <button mat-icon-button (click)="dialogRef.close()" class="modal-close-button" aria-label="Close dialog">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div mat-dialog-content>
+    <form class="register-form m-4" [formGroup]="masterHotelForm">
+      <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Destination</mat-label>
+            <mat-select formControlName="destination_id" (selectionChange)="onDestinationChange($event)" required>
+              <mat-option>
+                <ngx-mat-select-search 
+                  [formControl]="destinationSearchCtrl"
+                  placeholderLabel="Search destination..."
+                  noEntriesFoundLabel="No matching destinations found">
+                </ngx-mat-select-search>
+              </mat-option>
+              @for (destination of filteredDestination$ | async; track $index) {
+                <mat-option [value]="destination?.id">
+                  {{destination?.name}}
+                </mat-option>
+              }
+            </mat-select>
+            @if (masterHotelForm.get('destination_id')?.hasError('required')) {
+              <mat-error>
+                Destination is required
+              </mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Route</mat-label>
+            <mat-select formControlName="route_id" required>
+              <mat-option>
+                <ngx-mat-select-search 
+                  [formControl]="searchCtrl"
+                  placeholderLabel="Search route..."
+                  noEntriesFoundLabel="No matching route found">
+                </ngx-mat-select-search>
+              </mat-option>
+              @for (route of filteredRouteList$ | async; track $index) {
+                <mat-option [value]="route?.id">
+                  {{route?.route_name}}
+                </mat-option>
+              }
+            </mat-select>
+            @if (masterHotelForm.get('route_id')?.hasError('required')) {
+              <mat-error>
+                Destination is required
+              </mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Stay Category</mat-label>
+            <mat-select formControlName="room_id" required>          
+              @for (room of rooms; track room) {
+                <mat-option [value]="room?.id">
+                  {{room?.name}}
+                </mat-option>
+              }
+            </mat-select>
+            @if (masterHotelForm.get('room_id')?.hasError('required')) {
+              <mat-error>
+                Stay category is required
+              </mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width mb-3" appearance="outline">
+            <mat-label>Hotel Name</mat-label>
+            <input matInput formControlName="hotel_name">            
+            @if (masterHotelForm.get('hotel_name')?.hasError('required')) {
+            <mat-error>
+              Hotel name is required
+            </mat-error>
+            }
+          </mat-form-field>
+        </div> 
+        
+           
+        <div class=" col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <div class="routes-images">
+
+            <h6>Uploads Hotel images</h6>
+
+            <div class="routes-gllry">
+
+              <div class="uploaded-mage" *ngFor="let preview of imagePreviews">
+                <a href="javascript:void(0);" class="remove-img" (click)="removeImage(preview)" matTooltip="Remove Image" [matTooltipPosition]="'left'"><mat-icon class="close-icon">close</mat-icon></a>
+                @if(preview?.id){
+                  <a href="javascript:void(0);" class="add-tag" (click)="addImageTag(preview)" matTooltip="Add Image Alt Tag" [matTooltipPosition]="'left'"><mat-icon>add</mat-icon></a>
+                }
+                
+                <img [src]="preview.img" />
+                <img [src]="preview.img" />
+              </div>
+
+              <mat-card class="upload-card" (click)="fileInput.click()">
+                <mat-card-content>
+                  <mat-icon fontSize="large" class="upload-icon">upload</mat-icon>
+                  <p>Upload Photos</p>
+                  <input #fileInput type="file" (change)="onFileSelected($event)" accept="image/*" multiple hidden>
+                </mat-card-content>
+              </mat-card>
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <div class="example-button-row">
+            <button mat-flat-button color="primary" [disabled]="(!masterHotelForm.valid || isUploading)"
+              (click)="confirmAdd()">
+              <span *ngIf="!isUploading">Save</span>
+              <mat-spinner *ngIf="isUploading" [diameter]="20"></mat-spinner>
+            </button>
+            <button mat-flat-button color="warn" (click)="onNoClick()" tabindex="-1">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

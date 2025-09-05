@@ -1,0 +1,61 @@
+<div class="addContainer">
+  <div class="modalHeader">
+    <div class="editRowModal">
+      <div class="modalHeader clearfix">
+        <div class="modal-about">
+          <div class="p-t-5 font-17 font-b-500">
+            {{dialogTitle}}</div>
+        </div>
+      </div>
+    </div>
+    <button mat-icon-button (click)="dialogRef.close()" class="modal-close-button" aria-label="Close dialog">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div mat-dialog-content>
+    <form class="register-form m-4" [formGroup]="quotationForm">
+      <mat-radio-group class="payment-select" formControlName="pay_choice" (change)="updatePayAmount($event)">
+        <mat-radio-button value="1">Pay total {{ quotation?.quotation_price | currency: 'INR':'symbol':'1.0-0' }}</mat-radio-button>
+        <mat-radio-button value="2">Pay minimum {{ minPayAmt | currency: 'INR':'symbol':'1.0-0' }}</mat-radio-button>
+        <mat-radio-button value="3">Enter amount manually</mat-radio-button>
+      </mat-radio-group>
+      <mat-form-field class="example-full-width mt-3" *ngIf="quotationForm.controls['pay_choice'].value === '3'">
+        <mat-label>Pay Minimum</mat-label>
+        <input type="number" matInput formControlName="payable_amount" [min]="minPayAmt" [(ngModel)]="payabelAmt" />
+      </mat-form-field>
+      <mat-form-field class="example-full-width mt-3" appearance="outline">
+        <mat-label>Payment Method</mat-label>
+        <mat-select formControlName="payment_method" required>
+           <mat-option value="cash">Cash</mat-option>
+           <mat-option value="upi">UPI</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field class="example-full-width mb-3" appearance="outline">
+        <mat-label>Payment Date</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="payment_date" (focus)="picker.open()">
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+      <div class="routes-images">
+        <div class="routes-gllry"> 
+          <mat-card class="upload-card" (click)="fileInput.click()">
+            <mat-card-content>
+              <mat-icon fontSize="large" class="upload-icon">upload</mat-icon>
+              <p>{{uploadedReceipt}}</p>
+              <input #fileInput type="file" (change)="onFileChange($event)" accept="image/*,application/pdf" hidden>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+      <div class="row mt-3">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <div class="example-button-row">
+            <button mat-flat-button color="primary" [disabled]="(isLoading)"
+              (click)="confirmUpdate()">{{ isLoading?'Sending...':'Send' }}</button>
+            <button mat-flat-button color="warn" (click)="onNoClick()" tabindex="-1">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

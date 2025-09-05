@@ -1,0 +1,228 @@
+<div class="addContainer">
+  <div class="modalHeader">
+    <div class="editRowModal">
+      <div class="modalHeader clearfix">
+        <div class="modal-about">
+          <div class="p-t-5 font-17 font-b-500">
+            {{dialogTitle}}</div>
+        </div>
+      </div>
+    </div>
+    <button mat-icon-button (click)="dialogRef.close()" class="modal-close-button" aria-label="Close dialog">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div mat-dialog-content>
+    <form class="register-form m-4" [formGroup]="quotationForm">
+      <div class="row">
+        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Destination</mat-label>
+            <mat-select formControlName="destination_id" (selectionChange)="getPackageByDestination($event.value)" required>
+              <mat-option>
+                <ngx-mat-select-search 
+                  [formControl]="searchCtrl"
+                  placeholderLabel="Search destination..."
+                  noEntriesFoundLabel="No matching destinations found">
+                </ngx-mat-select-search>
+              </mat-option>
+              
+              @for (destination of filteredDestinations$ | async; track $index) {
+                <mat-option [value]="destination.id">
+                  {{destination.name}}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <mat-radio-group class="payment-select" formControlName="tour_package_id">
+            @for (package of packageLists; track package) {
+              <mat-radio-button [value]="package?.id" (click)="getStayCategoryByPackage(package)">
+                <strong>{{package?.package_name}}</strong>
+                <br>
+                {{package?.package_type}}
+                <br>
+                {{package?.number_of_days}}D/{{package?.number_of_nights}}N
+              </mat-radio-button>
+            }            
+          </mat-radio-group>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width mb-2" appearance="outline">
+            <mat-label>Stay Category</mat-label>
+            <mat-select formControlName="stay_category_id" (selectionChange)="getPackagePrice()" required>
+              @for (room of stayCategory; track room) {
+                <mat-option [value]="room?.room?.id">{{room?.room?.name}}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width mb-3" appearance="outline">
+            <mat-label>Travel Start Date</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="travel_start_date" [min]="minDate" (focus)="picker.open()">
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div class=" col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width mb-3" appearance="outline">
+            <mat-label>Traveler Adult</mat-label>
+            <input matInput formControlName="traveler_no_of_adult" (keypress)="onlyNumbers($event)"
+            maxlength="3" (change)="getPackagePrice()">
+          </mat-form-field>
+        </div>
+        <div class=" col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width mb-3" appearance="outline">
+            <mat-label>Traveler Child</mat-label>
+            <input matInput formControlName="traveler_no_of_child" (keypress)="onlyNumbers($event)"
+            maxlength="3" (change)="getPackagePrice()">
+          </mat-form-field>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+            <mat-form-field class="example-full-width mb-3" appearance="outline">
+              <mat-label>Trip Duration</mat-label>
+              <input matInput formControlName="trip_duration" required>            
+            </mat-form-field>
+        </div>
+        <!-- <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+            <mat-form-field class="example-full-width mb-3" appearance="outline">
+              <mat-label>Package Price</mat-label>
+              <input matInput formControlName="package_price" readonly required>            
+            </mat-form-field>
+        </div> -->
+        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+            <mat-form-field class="example-full-width mb-3" appearance="outline">
+              <mat-label>Package Name</mat-label>
+              <input matInput formControlName="tour_package_name" required>            
+            </mat-form-field>
+        </div>
+        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+            <mat-form-field class="example-full-width mb-3" appearance="outline">
+              <mat-label>Package Type</mat-label>
+              <!-- <input matInput formControlName="tour_package_type" required>             -->
+              <mat-select formControlName="tour_package_type" required>
+                <mat-option value="Private Tour">Private Tour</mat-option>
+                <mat-option value="Group Tour">Group Tour</mat-option>
+              </mat-select>
+            </mat-form-field>
+        </div>
+        
+        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+            <mat-form-field class="example-full-width mb-3" appearance="outline">
+              <mat-label>Stay Category</mat-label>
+              <!-- <input matInput formControlName="stay_category" required>             -->
+              <mat-select formControlName="stay_category" required>
+              @for (room of stayCategory; track room) {
+                <mat-option [value]="room?.room?.name">{{room?.room?.name}}</mat-option>
+              }
+            </mat-select>
+            </mat-form-field>
+        </div>
+        <div class=" col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width mb-3" appearance="outline">
+            <mat-label>No. Of Rooms</mat-label>
+            <input matInput formControlName="no_of_rooms" (keypress)="onlyNumbers($event)">
+          </mat-form-field>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+            <mat-form-field class="example-full-width mb-3" appearance="outline">
+              <mat-label>Package Price</mat-label>
+              <input matInput formControlName="package_price" required>            
+            </mat-form-field>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width mb-3" appearance="outline">
+            <mat-label>Quotation Price</mat-label>
+            <input matInput formControlName="quotation_price" required>            
+          </mat-form-field>
+        </div>        
+        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width mb-3" appearance="outline" required>
+            <mat-label>Full Name</mat-label>
+            <input matInput formControlName="full_name" required>            
+          </mat-form-field>
+        </div>
+
+        <div class=" col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <div class="flex gap-4">
+            <div class="w-[100px]">
+              <mat-form-field appearance="outline">                
+                <mat-select class="pl-8" placeholder="Country Code" formControlName="country_code" (closed)="clearFilter()">
+                  <mat-option>
+                    <ngx-mat-select-search
+                      formControlName="filter"
+                      placeholderLabel="Search"
+                      (input)="filter($event)">
+                    </ngx-mat-select-search>
+                  </mat-option>
+                  <mat-option *ngFor="let country of filtered" [value]="country.code">
+                    <div class="flex items-center gap-2" (click)="flag =country.flagUrl">
+                      <div><img class="w-6" [src]="country.flagUrl" alt=""></div>
+                      {{ country.code }}
+                    </div>
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <mat-form-field class="example-full-width mb-3" appearance="outline" required>
+              <mat-label>Mobile No.</mat-label>
+              <input matInput formControlName="mobile_no" (keypress)="onlyNumbers($event)"
+              maxlength="15">
+            </mat-form-field>
+          </div>          
+        </div>
+        <div class=" col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width mb-3" appearance="outline">
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="email">
+          </mat-form-field>
+        </div>
+        
+        
+        <!-- <div class=" col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width mb-3" appearance="outline">
+            <mat-label>Traveler Infrant</mat-label>
+            <input matInput formControlName="traveler_no_of_infant">
+          </mat-form-field>
+        </div> -->
+        
+        <!-- <div class=" col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <mat-label>Aditional Requirement</mat-label>
+          <div class="NgxEditor__Wrapper">
+            <ngx-editor-menu [editor]="editor!" [toolbar]="toolbar!"> </ngx-editor-menu>
+            <ngx-editor [editor]="editor!" [placeholder]="'Type here...'" class="NgxEditorStyles"
+              formControlName="aditional_requirement"></ngx-editor>
+          </div>
+        </div> -->
+        <div class=" col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <mat-label>Itenaries</mat-label>
+          <div class="NgxEditor__Wrapper">
+            <ngx-editor-menu [editor]="editor2!" [toolbar]="toolbar!"> </ngx-editor-menu>
+            <ngx-editor [editor]="editor2!" [placeholder]="'Type here...'" class="NgxEditorStyles"
+              formControlName="itenaries_str"></ngx-editor>
+          </div>
+        </div>
+        <div class=" col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <mat-label>Inclusion/Exclusion</mat-label>
+          <div class="NgxEditor__Wrapper">
+            <ngx-editor-menu [editor]="editor3!" [toolbar]="toolbar!"> </ngx-editor-menu>
+            <ngx-editor [editor]="editor3!" [placeholder]="'Type here...'" class="NgxEditorStyles"
+              formControlName="inclusion_exclusion_str"></ngx-editor>
+          </div>
+        </div>
+      </div>
+      
+      <div class="row mt-3">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <div class="example-button-row">
+            <button mat-flat-button color="primary" [disabled]="(isLoading)"
+              (click)="confirmUpdate()">{{ isLoading?'Saving...':'Save & Send Quotation' }}</button>
+            <button mat-flat-button color="warn" (click)="onNoClick()" tabindex="-1">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

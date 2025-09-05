@@ -1,0 +1,27 @@
+.fixed-table {
+    table-layout: fixed;
+    width: 100%;
+  }
+
+  .fixed-table th,
+.fixed-table td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.fixed-table th:nth-child(1), 
+.fixed-table td:nth-child(1) { /* # column */
+  width: 50px;
+}
+.fixed-table th:nth-child(2), 
+.fixed-table td:nth-child(2) { /* # column */
+  width: 200px;
+}
+.fixed-table th:nth-child(3), 
+.fixed-table td:nth-child(3) { /* Description column */
+  width: 350px;
+}
+.fixed-table th:nth-child(6), 
+.fixed-table td:nth-child(6) { /* Description column */
+  width: 100px;
+}

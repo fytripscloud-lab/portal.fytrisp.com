@@ -1,0 +1,51 @@
+.destiselect {
+    margin-left: 12px;
+
+    select {
+        background: #fff;
+        height: 45px;
+        padding: 0 15px 0 10px;
+        border: none;
+        max-width: 200px;
+        width: 100%;
+        min-width: 200px;
+        color: rgba(0, 0, 0, 0.54);
+    }
+
+    input {
+        background: #fff;
+        height: 45px;
+        padding: 0 15px 0 10px;
+        border: none;
+        max-width: 200px;
+        width: 100%;
+        min-width: 200px;
+        color: rgba(0, 0, 0, 0.54);
+    }
+}
+
+.serchdate {
+    display: flex !important;
+
+    input {
+        background: #fff;
+        height: 45px;
+        padding: 0 15px 0 10px;
+        border: none;
+        max-width: 1300px;
+        width: 100%;
+        min-width: 130px;
+        color: rgba(0, 0, 0, 0.54);
+        margin-left: 12px;
+    }
+
+}
+mat-form-field {
+margin-right: 12px;
+}
+::ng-deep .mdc-text-field--filled{
+    height: 60px !important;
+}
+::ng-deep .mdc-text-field--filled:not(.mdc-text-field--disabled) {
+    background-color: transparent !important;
+}

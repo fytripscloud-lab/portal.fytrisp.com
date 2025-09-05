@@ -1,0 +1,122 @@
+<div class="addContainer">
+  <div class="modalHeader">
+    <div class="editRowModal">
+      <div class="modalHeader clearfix">
+        <div class="modal-about">
+          <div class="p-t-5 font-17 font-b-500">
+            {{dialogTitle}}</div>
+        </div>
+      </div>
+    </div>
+    <button mat-icon-button (click)="dialogRef.close()" class="modal-close-button" aria-label="Close dialog">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div mat-dialog-content>
+    <form class="register-form m-4" [formGroup]="officeExpenseForm">
+      <div class="row">        
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Category</mat-label>
+            <mat-select formControlName="category_id" required>
+              <mat-option>
+                <ngx-mat-select-search 
+                  [formControl]="searchCtrl"
+                  placeholderLabel="Search destination..."
+                  noEntriesFoundLabel="No matching category found">
+                </ngx-mat-select-search>
+              </mat-option>
+              
+              @for (category of filteredCategory$ | async; track $index) {
+                <mat-option [value]="category.id">
+                  {{category.category_name}}
+                </mat-option>
+              }
+            </mat-select>            
+            @if (officeExpenseForm.get('category_id')?.hasError('required')) {
+              <mat-error>
+                Category is required
+              </mat-error>
+            }
+          </mat-form-field>
+        </div>     
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+          <mat-form-field class="example-full-width mb-3" appearance="outline">
+            <mat-label>Paid To</mat-label>
+            <input matInput formControlName="paid_to" type="text" >            
+            @if (officeExpenseForm.get('paid_to')?.hasError('required')) {
+            <mat-error>
+              Paid to is required
+            </mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Description</mat-label>
+            <textarea matInput formControlName="description" rows="3"></textarea>            
+            @if (officeExpenseForm.get('description')?.hasError('required')) {
+            <mat-error>
+              Description is required
+            </mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+          <mat-form-field class="example-full-width mb-3" appearance="outline">
+            <mat-label>Amount</mat-label>
+            <input matInput formControlName="amount" type="number" step="any" min="1">            
+            @if (officeExpenseForm.get('amount')?.hasError('required')) {
+            <mat-error>
+              Amount is required
+            </mat-error>
+            }
+          </mat-form-field>
+        </div>       
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+          <mat-form-field class="example-full-width mb-3" appearance="outline">
+            <mat-label>Payment Type</mat-label>
+            <mat-select formControlName="transaction_type" required>
+              <mat-option value="credit">Credit</mat-option>
+              <mat-option value="debit">Debit</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+            <mat-form-field class="example-full-width mb-3" appearance="outline">
+              <mat-label>Payment Mode</mat-label>
+              <!-- <input matInput formControlName="tour_package_type" required>             -->
+              <mat-select formControlName="payment_mode" required>
+                <mat-option value="cash">Cash</mat-option>
+                <mat-option value="upi">UPI</mat-option>
+                <mat-option value="bank_transfer">Bank Transfer</mat-option>
+                <mat-option value="card">Card</mat-option>
+                <mat-option value="net_banking">Net Banking</mat-option>
+                <mat-option value="cheque">Cheque</mat-option>
+              </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 ">
+          <mat-form-field class="example-full-width mb-3" appearance="outline">
+            <mat-label>Expense Date</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="expense_date" (focus)="picker.open()">
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+          <div class="example-button-row">
+            <button mat-flat-button color="primary" [disabled]="(!officeExpenseForm.valid || isSavng)"
+              (click)="confirmAdd()">
+              <span *ngIf="!isSavng">Save</span>
+              <mat-spinner *ngIf="isSavng" [diameter]="20"></mat-spinner>
+            </button>
+            <button mat-flat-button color="warn" (click)="onNoClick()" tabindex="-1">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

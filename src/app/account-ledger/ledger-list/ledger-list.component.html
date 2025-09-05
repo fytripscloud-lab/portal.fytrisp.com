@@ -1,0 +1,133 @@
+<section class="content">
+    <div class="content-block">
+      @for (breadscrum of breadscrums; track breadscrum) {
+        <div class="block-header">
+          <!-- breadcrumb -->
+          <app-breadcrumb [title]="breadscrum.title" [items]="breadscrum.items" [active_item]="breadscrum.active">
+          </app-breadcrumb>
+        </div>
+      }
+      <!-- Basic Table -->
+      <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+          <div class="card">
+            <div class="materialTableHeader">
+              <div class="left">
+                <ul class="header-buttons-left ms-0">
+                  <li class="tbl-search-box">
+                    <label for="search-input"><i class="material-icons search-icon">search</i></label>
+                    <input placeholder="Search" type="text" #filter class="browser-default search-field"
+                      aria-label="Search box" (input)="onSearch(filter.value)">
+                  </li>
+                </ul>
+              </div>
+              <div class="right">
+                <ul class="tbl-export-btn">
+                  <!-- <li class="tbl-header-btn">
+                    <div class="m-l-10" matTooltip="ADD">
+                      <button mat-mini-fab color="primary" (click)="addNew()">
+                        <mat-icon>add</mat-icon>
+                      </button>
+                    </div>
+                  </li> -->
+                  <li class="tbl-header-btn">
+                    <div class="m-l-10" matTooltip="REFRESH">
+                      <button mat-mini-fab color="primary" (click)="refresh()">
+                        <mat-icon>refresh</mat-icon>
+                      </button>
+                    </div>
+                  </li>
+                  <!-- <li>
+                    <div class="export-button m-l-10" matTooltip="XLSX">
+                      <img src="assets/images/icons/xlsx.png" alt="" (click)="exportExcel()" />
+                    </div>
+                  </li> -->
+                </ul>
+              </div>
+            </div>
+            <div class="body table-responsive">
+              @if(isLoading)
+              {
+                <div class="tbl-spinner">
+                  <mat-progress-spinner color="primary" [diameter]="40" mode="indeterminate">
+                  </mat-progress-spinner>
+                </div>
+              }
+              @else {
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Payment ID</th>
+                      <th>Amount</th>
+                      <th>Opening Balance</th>
+                      <th>Closing Balance</th>
+                      <th>Payment Mode</th>
+                      <th>Payment Purpose</th>
+                      <th>Transaction Type</th>
+                      <th>Remark</th>
+                      <th style="min-width: 140px;" class="sortable" (click)="sort('transaction_date')">Transaction Date
+                        <span *ngIf="sortColumn === 'transaction_date'">
+                          {{ sortDirection === 'asc' ? '↑' : '↓' }}
+                        </span>
+                      </th>                      
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @if(dataLists.length>0){
+                      @for (item of dataLists; track $index) {
+                          <tr>
+                              <th scope="row">{{getRowNumber($index)}}</th>                              
+                              <td>{{item?.payment_id}}</td>
+                              <td>{{item.amount}}</td>  
+                              <td>{{item?.opening_balance}}</td>
+                              <td>{{item?.closing_balance}}</td>
+                              <td>{{item?.payment_mode}}</td>
+                              <td>{{item?.purpose_type}}</td>
+                              <td>{{item?.transaction_type}}</td>
+                              <td>{{item?.transaction_remark}}</td>
+                              <td>{{item.transaction_date | date: 'mediumDate'}}</td>                              
+                          </tr>
+                      }
+                    }
+                    @else{
+                      <tr>
+                        <td colspan="8" class="text-center">No data found</td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+                <mat-paginator 
+                  #paginator
+                  [length]="totalItems"
+                  [pageIndex]="currentPage"
+                  [pageSize]="pageSize"
+                  [pageSizeOptions]="[10, 25, 50, 100]"
+                  (page)="onPageChange($event)">
+                </mat-paginator>
+              }
+              <h5>Summary</h5>
+              <table class="table">
+                <thead>
+                    <tr>
+                      <th>Net Balance</th>
+                      <th>Total Credit</th>
+                      <th>Total Debit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{summaryList?.net_balance}}</td>
+                        <td>{{summaryList?.total_credit}}</td>
+                        <td>{{summaryList?.total_debit}}</td>
+                    </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- #END# Basic Table -->
+    </div>
+  </section>
+  

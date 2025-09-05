@@ -1,0 +1,165 @@
+<section class="content">
+    <div class="content-block">
+        @for (breadscrum of breadscrums; track breadscrum) {
+        <div class="block-header">
+            <!-- breadcrumb -->
+            <app-breadcrumb [title]="breadscrum.title" [items]="breadscrum.items" [active_item]="breadscrum.active">
+            </app-breadcrumb>
+        </div>
+        }
+    <div class="row clearfix">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+            <div class="body">
+                <!-- Add content here -->
+                <div class="row clearfix">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="card">
+                            <div class="header">
+                                <h2>{{breadscrums[0].title}}</h2>
+                            </div>
+                            <div class="body">
+                                <form class="register-form m-4" [formGroup]="blogForm">
+                                  <div class=" col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                    <mat-form-field class="example-full-width" appearance="outline">
+                                      <mat-label>Destination</mat-label>
+                                      <mat-select formControlName="destination_id" required>
+                                        <mat-option>
+                                          <ngx-mat-select-search 
+                                            [formControl]="searchCtrl"
+                                            placeholderLabel="Search destination..."
+                                            noEntriesFoundLabel="No matching destinations found">
+                                          </ngx-mat-select-search>
+                                        </mat-option>
+                                        
+                                        @for (destination of filteredDestinations$ | async; track $index) {
+                                          <mat-option [value]="destination.id">
+                                            {{destination.name}}
+                                          </mat-option>
+                                        }
+                                      </mat-select>
+                                      <mat-icon matSuffix matTooltip="Select destination from dropdown." [matTooltipPosition]="'left'">info</mat-icon>
+                                      @if (blogForm.get('destination_id')?.hasError('required')) {
+                                        <mat-error>
+                                          Destination is required
+                                        </mat-error>
+                                      }
+                                    </mat-form-field>
+                                  </div>
+                                    <div class="form-row">
+                                        <mat-form-field class="example-full-width" appearance="outline">
+                                            <mat-label>Title</mat-label>
+                                            <input matInput formControlName="title" (input)="onTitleChange()" required>
+                                            <mat-error *ngIf="blogForm.get('title')?.hasError('required')">
+                                              Blog title is required
+                                            </mat-error>
+                                          </mat-form-field>
+           
+                                    </div>
+                                    <div class=" col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                      <div class="routes-images">
+                                        <h4>Upload Banner Image</h4>
+                                        <div class="routes-gllry">
+                                          @if(bannerImagePreview!=''){
+                                            <div class="uploaded-mage">                
+                                              <img [src]="bannerImagePreview" />
+                                            </div>
+                                          }
+                                          
+                                          <mat-card class="upload-card" (click)="bannerfileInput.click()">
+                                            <mat-card-content>
+                                              <mat-icon fontSize="large" class="upload-icon">upload</mat-icon>
+                                              <p>Banner Image</p>
+                                              <input #bannerfileInput type="file" (change)="onFileChangeBanner($event)" accept="image/*" hidden>
+                                            </mat-card-content>
+                                          </mat-card>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="routes-images">
+                                      <h4>Upload Editor Images</h4>
+                                        <div class="routes-gllry">
+                                          @if(uploadedImages.length>0){
+                                            @for (blog_image of uploadedImages; track blog_image) {
+                                              <div class="uploaded-mage">         
+                                                <a href="javascript:void(0);" class="copy-tag" (click)="copyImagePath(blog_image)" matTooltip="Copy Image" [matTooltipPosition]="'left'"><mat-icon class="link-icon">link</mat-icon></a>       
+                                                <img [src]="blog_image" />
+                                              </div>
+                                            }
+                                          }
+                                          <mat-card class="upload-card" (click)="uploadfileInput.click()">
+                                            <mat-card-content>
+                                              <mat-icon fontSize="large" class="upload-icon">upload</mat-icon>
+                                              <p>Blog Images</p>
+                                              <input #uploadfileInput type="file" (change)="uploadBlogImages($event)" accept="image/*" multiple hidden>
+                                            </mat-card-content>
+                                          </mat-card>
+                                        </div>
+                                      </div>
+                                    <div class="NgxEditor__Wrapper">
+                                        <ngx-editor-menu [editor]="editor!" [toolbar]="toolbar!"> </ngx-editor-menu>
+                                        <ngx-editor [editor]="editor!" [placeholder]="'Type here...'" class="NgxEditorStyles" formControlName="content"></ngx-editor>
+                                      </div>
+                                      <mat-error *ngIf="blogForm.get('content')?.hasError('required')">
+                                        Blog content is required
+                                      </mat-error>
+                                      <div class="form-row mt-3">
+                                        <mat-form-field class="example-full-width" appearance="outline">
+                                            <mat-label>Meta Title</mat-label>
+                                            <input matInput formControlName="meta_title" required>
+                                            <mat-error *ngIf="blogForm.get('meta_title')?.hasError('required')">
+                                              Meta title is required
+                                            </mat-error>
+                                          </mat-form-field>
+                                        <mat-form-field class="example-full-width" appearance="outline">
+                                            <mat-label>Meta Description</mat-label>
+                                            <textarea matInput formControlName="meta_description"></textarea>
+                                          </mat-form-field>
+                                          <mat-form-field class="example-full-width" appearance="outline">
+                                            <mat-label>Meta Keywords</mat-label>
+                                            <input matInput formControlName="meta_keywords">
+                                          </mat-form-field>
+                                          <mat-form-field class="example-full-width" appearance="outline">
+                                            <mat-label>Meta Tags</mat-label>
+                                            <input matInput formControlName="meta_tags">
+                                          </mat-form-field>
+                                          <!-- <app-file-upload formControlName="uploadFile" accept="images/*" formControlName="uploaded_files" (change)="onFileSelected($event)"></app-file-upload> -->
+
+                                          <div class="routes-images">
+                                            <h4>Featured Image</h4>
+                                            <div class="routes-gllry">
+                                              @if(imagePreviews!=''){
+                                                <div class="uploaded-mage">
+                                                  <!-- <a href="javascript:void(0);" class="remove-img" (click)="removeImage()" matTooltip="Remove Image" [matTooltipPosition]="'left'"><mat-icon class="close-icon">close</mat-icon></a> -->
+                                                  @if(blogData?.images?.length>0){
+                                                  <a href="javascript:void(0);" class="copy-tag" (click)="addImageTag()" matTooltip="Add Image Alt Tag" [matTooltipPosition]="'left'"><mat-icon>add</mat-icon></a>
+                                                  }
+                                                  <img [src]="imagePreviews" />
+                                                </div>
+                                              }
+                                              
+                                              <mat-card class="upload-card" (click)="fileInput.click()">
+                                                <mat-card-content>
+                                                  <mat-icon fontSize="large" class="upload-icon">upload</mat-icon>
+                                                  <p>Upload Image</p>
+                                                  <input #fileInput type="file" (change)="onFileSelected($event)" accept="image/*" hidden>
+                                                </mat-card-content>
+                                              </mat-card>
+                                            </div>
+                                          </div>
+                                    </div>
+                                    <div class="row mt-3">
+                                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                            <button class="btn-space" mat-raised-button color="primary" [disabled]="isLoading" (click)="saveBlogForm()">Submit</button>
+                                            <button mat-raised-button type="button" routerLink="/blog" color="warn" class="msr-2">Cancel</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</section>

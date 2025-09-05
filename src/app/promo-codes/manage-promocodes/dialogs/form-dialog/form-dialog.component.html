@@ -1,0 +1,191 @@
+<div class="addContainer">
+  <div class="modalHeader">
+    <div class="editRowModal">
+      <div class="modalHeader clearfix">
+        <div class="modal-about">
+          <div class="p-t-5 font-17 font-b-500">
+            {{dialogTitle}}</div>
+        </div>
+      </div>
+    </div>
+    <button mat-icon-button (click)="dialogRef.close()" class="modal-close-button" aria-label="Close dialog">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div mat-dialog-content>
+    <form class="register-form m-4" [formGroup]="promoForm">
+      <div class="row">
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Destination</mat-label>
+            <mat-select formControlName="destination_id">
+              <mat-option>
+                <ngx-mat-select-search 
+                  [formControl]="searchCtrl"
+                  placeholderLabel="Search destination..."
+                  noEntriesFoundLabel="No matching destinations found">
+                </ngx-mat-select-search>
+              </mat-option>
+              
+              @for (destination of filteredDestinations$ | async; track $index) {
+                <mat-option [value]="destination.id">
+                  {{destination.name}}
+                </mat-option>
+              }
+            </mat-select>
+            @if (promoForm.get('destination_id')?.hasError('required')) {
+              <mat-error>
+                Destination is required
+              </mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width mb-3" appearance="outline">
+            <mat-label>Promo Code</mat-label>
+            <input matInput formControlName="code" required>            
+            <!-- <mat-icon matSuffix>location_on</mat-icon> -->
+            @if (promoForm.get('code')?.hasError('required')) {
+            <mat-error>
+              Code is required
+            </mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width mb-3" appearance="outline">
+            <mat-label>Title</mat-label>
+            <input matInput formControlName="title" required>            
+            <!-- <mat-icon matSuffix>location_on</mat-icon> -->
+            @if (promoForm.get('title')?.hasError('required')) {
+            <mat-error>
+              Title is required
+            </mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Promo Code Type</mat-label>
+            <mat-select formControlName="promo_code_type_id" required>
+              @for (code_type of promocodeTypes; track code_type) {
+                <mat-option [value]="code_type.encrypt_id">{{code_type?.name}}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width mb-3" appearance="outline">
+            <mat-label>Description</mat-label>
+            <textarea matInput formControlName="description" rows="5" required></textarea>
+            <!-- <mat-icon matSuffix>location_on</mat-icon> -->
+            @if (promoForm.get('description')?.hasError('required')) {
+            <mat-error>
+              Description is required
+            </mat-error>
+            }
+          </mat-form-field>
+        </div>        
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Select Youtuber</mat-label>
+            <mat-select formControlName="youtuber_id">
+              @for (youtuber of youtubers; track youtuber) {
+                <mat-option [value]="youtuber.encrypt_id">{{youtuber?.name}} ({{youtuber?.channel_name}})</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Discount Type</mat-label>
+            <mat-select formControlName="discount_type" required="">
+              <mat-option value="flat">Flat</mat-option>
+              <mat-option value="percent">Percent</mat-option>
+            </mat-select>
+            @if (promoForm.get('discount_type')?.hasError('required')) {
+            <mat-error>
+              Discount type is required
+            </mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width mb-3" appearance="outline" (keypress)="onlyNumbers($event)">
+            <mat-label>Discount</mat-label>
+            <input matInput formControlName="discount_value" required="">            
+            @if (promoForm.get('discount_value')?.hasError('required')) {
+            <mat-error>
+              Discount is required
+            </mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width mb-3" appearance="outline">
+            <mat-label>Usage Limit</mat-label>
+            <input matInput formControlName="usage_limit" (keypress)="onlyNumbers($event)">            
+            @if (promoForm.get('usage_limit')?.hasError('required')) {
+            <mat-error>
+              Usage limit is required
+            </mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width mb-3" appearance="outline">
+            <mat-label>Usage Per User</mat-label>
+            <input matInput formControlName="usage_per_user" (keypress)="onlyNumbers($event)">            
+            @if (promoForm.get('usage_per_user')?.hasError('required')) {
+            <mat-error>
+              Usage per user is required.
+            </mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width mb-3" appearance="outline">
+            <mat-label>Valid From</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="valid_from" [min]="minDate" (focus)="picker.open()">
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width mb-3" appearance="outline">
+            <mat-label>Valid To</mat-label>
+            <input matInput [matDatepicker]="pickerTo" formControlName="valid_until" [min]="minDate" (focus)="pickerTo.open()">
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #pickerTo></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>First Time User</mat-label>
+            <mat-select formControlName="is_first_time_user" required="">
+              <mat-option [value]="true">Yes</mat-option>
+              <mat-option [value]="false">No</mat-option>
+            </mat-select>
+            @if (promoForm.get('is_first_time_user')?.hasError('required')) {
+            <mat-error>
+              This field is required.
+            </mat-error>
+            }
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row mt-3">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <div class="example-button-row">
+            <button mat-flat-button color="primary" [disabled]="(isLoading)"
+              (click)="confirmAdd()">
+              <span *ngIf="!isLoading">Save</span>
+              <mat-spinner *ngIf="isLoading" [diameter]="20"></mat-spinner>
+            </button>
+            <button mat-flat-button color="warn" (click)="onNoClick()" tabindex="-1">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

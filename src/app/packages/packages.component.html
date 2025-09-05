@@ -1,0 +1,1148 @@
+<section class="content">
+  <div class="content-block">
+    @for (breadscrum of breadscrums; track breadscrum) {
+    <div class="block-header">
+      <!-- breadcrumb -->
+      <app-breadcrumb [title]="breadscrum.title" [items]="breadscrum.items" [active_item]="breadscrum.active">
+      </app-breadcrumb>
+    </div>
+    }
+    <div class="row clearfix">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        @if(isLoading)
+        {
+        <div class="tbl-spinner">
+          <mat-progress-spinner color="primary" [diameter]="40" mode="indeterminate">
+          </mat-progress-spinner>
+        </div>
+        }@else{
+        <div class="body">
+          <!-- Add content here -->
+          <div class="row clearfix">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+              <div class="card">
+                <div class="header">
+                  <h2>
+                    <strong>Add Trip</strong>
+                  </h2>
+                </div>
+                <div class="body">
+                  <mat-vertical-stepper [selectedIndex]="currentStepIndex" (selectedIndexChange)="onStepChange($event)"
+                    [linear]="isLinear" #stepper>
+                    <mat-step [stepControl]="basicInfoForm" label="Step 1">
+                      <form [formGroup]="basicInfoForm">
+                        <ng-template matStepLabel>Basic Info</ng-template>
+
+                        <div class="from-row">
+
+                          <mat-form-field class="example-full-width" appearance="outline">
+                            <mat-label>Select Destination</mat-label>
+                            <mat-select multiple formControlName="destination_ids"
+                              (selectionChange)="onDestinationChange($event)" required>
+                              <mat-option>
+                                <ngx-mat-select-search [formControl]="destinationSearchCtrl"
+                                  placeholderLabel="Search destination..."
+                                  noEntriesFoundLabel="No matching destinations found">
+                                </ngx-mat-select-search>
+                              </mat-option>
+                              @for (destination of filteredDestinations$ | async; track $index) {
+                              <mat-option [value]="destination.id">
+                                {{destination.name}}
+                              </mat-option>
+                              }
+                            </mat-select>
+                            <mat-error *ngIf="basicInfoForm.get('destination_ids')?.hasError('required')">
+                              Destination is required
+                            </mat-error>
+                          </mat-form-field>
+                          <mat-form-field class="example-full-width" appearance="outline">
+                            <mat-label>Select Category</mat-label>
+                            <mat-select multiple formControlName="category_ids">
+                              @for (category of categoryLists; track $index) {
+                              <mat-option [value]="category.id">{{ category.name }}</mat-option>
+                              }
+                            </mat-select>
+                            <mat-error *ngIf="basicInfoForm.get('category_ids')?.hasError('required')">
+                              Category is required
+                            </mat-error>
+                          </mat-form-field>
+                          <mat-form-field class="example-full-width" appearance="outline">
+                            <mat-label>Select Duration</mat-label>
+                            <mat-select formControlName="number_of_days" required>
+                              <!-- @for (duration of durations; track $index) {
+                              <mat-option [value]="duration.id">{{duration.no_of_days}} days</mat-option>
+                              } -->
+                              @for (duration of durationArray; track duration) {
+                              <mat-option [value]="duration">{{duration}} days</mat-option>
+                              }
+                            </mat-select>
+                            <mat-error *ngIf="basicInfoForm.get('number_of_days')?.hasError('required')">
+                              Duration is required
+                            </mat-error>
+                          </mat-form-field>
+
+                        </div>
+                        <mat-form-field class="example-full-width" appearance="outline">
+                          <mat-label>Package Name</mat-label>
+                          <input matInput formControlName="package_name">
+                          <mat-error *ngIf="basicInfoForm.get('package_name')?.hasError('required')">
+                            Package name is required
+                          </mat-error>
+                          <mat-error *ngIf="basicInfoForm.get('package_name')?.hasError('minlength')">
+                            Package name must be at least 3 characters.
+                          </mat-error>
+                        </mat-form-field>
+
+                        <!-- <div class="from-row">
+                          <mat-form-field class="example-full-width" appearance="outline">
+                            <mat-label>Select Days</mat-label>
+                            <mat-select formControlName="number_of_days">
+                              <mat-option value="2">2 days</mat-option>
+                              <mat-option value="3">3 days</mat-option>
+                              <mat-option value="4">4 days</mat-option>
+                              <mat-option value="5">5 days</mat-option>
+                              <mat-option value="6">6 days</mat-option>
+                              <mat-option value="7">7 days</mat-option>
+                              <mat-option value="8">8 days</mat-option>
+                              <mat-option value="9">9 days</mat-option>
+                              <mat-option value="10">10 days</mat-option>
+                              <mat-option value="11">11 days</mat-option>
+                              <mat-option value="12">12 days</mat-option>
+                              <mat-option value="13">13 days</mat-option>
+                              <mat-option value="14">14 days</mat-option>
+                              <mat-option value="15">15 days</mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="basicInfoForm.get('number_of_days')?.hasError('required')">
+                              Day is required
+                            </mat-error>
+                          </mat-form-field>
+
+                          <mat-form-field class="example-full-width" appearance="outline">
+                            <mat-label>Select Number of Night</mat-label>
+                            <mat-select formControlName="number_of_nights">
+                              <mat-option value="1">1 night</mat-option>
+                              <mat-option value="2">2 night</mat-option>
+                              <mat-option value="3">3 night</mat-option>
+                              <mat-option value="4">4 night</mat-option>
+                              <mat-option value="5">5 night</mat-option>
+                              <mat-option value="6">6 night</mat-option>
+                              <mat-option value="7">7 night</mat-option>
+                              <mat-option value="8">8 night</mat-option>
+                              <mat-option value="9">9 night</mat-option>
+                              <mat-option value="10">10 night</mat-option>
+                              <mat-option value="11">11 night</mat-option>
+                              <mat-option value="12">12 night</mat-option>
+                              <mat-option value="13">13 night</mat-option>
+                              <mat-option value="14">14 night</mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="basicInfoForm.get('number_of_nights')?.hasError('required')">
+                              Night is required
+                            </mat-error>
+                          </mat-form-field>
+                        </div> -->
+
+                        <div class="from-row">
+                          <mat-form-field class="example-full-width" appearance="outline">
+                            <mat-label>Select Facilities</mat-label>
+                            <mat-select multiple formControlName="facilities_json">
+                              @for (facility of facilities; track facility) {
+                              <mat-option [value]="facility.value">
+                                <img [src]="facility.img" alt="{{ facility.label }}" class="facility-icon" />
+                                {{ facility.label }}
+                              </mat-option>
+                              }
+                            </mat-select>
+                            <mat-error *ngIf="basicInfoForm.get('facilities')?.hasError('required')">
+                              Please select at least one facility
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div class="from-row">
+                          <mat-form-field class="example-full-width" appearance="outline">
+                            <mat-label>Select Stay Category</mat-label>
+                            <mat-select multiple formControlName="room_ids">
+                              @for (rooms of roomsList; track rooms) {
+                              <mat-option [value]="rooms.id">{{rooms.name}}</mat-option>
+                              }
+                            </mat-select>
+                            <mat-error *ngIf="basicInfoForm.get('rooms')?.hasError('required')">
+                              Please select at least one option.
+                            </mat-error>
+                          </mat-form-field>
+                          <mat-form-field class="example-full-width" appearance="outline">
+                            <mat-label>Package Type</mat-label>
+                            <mat-select formControlName="package_type" required>
+                              <!-- @for (duration of durations; track $index) {
+                            <mat-option [value]="duration.id">{{duration.no_of_days}} days</mat-option>
+                            } -->
+                              <mat-option [value]="'Private Tour'">Private Tour</mat-option>
+                              <mat-option [value]="'Group Tour'">Group Tour</mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="basicInfoForm.get('package_type')?.hasError('required')">
+                              Please select a package type.
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        @if(basicInfoForm.get('package_type')?.value=='Group Tour'){
+                        <div class="dynamic-input-container">
+                          <h4>Group Tour Availability</h4>
+                          <div class="group-tour-add-date">
+                            <div class="add-date-fill" formArrayName="grouptour_dates_json">
+                              @for (group_tour of grouptourArray.controls; track $index) {
+                              <div class="group-date-repet" [formGroupName]="$index">
+                                <mat-form-field class="example-full-width" appearance="outline">
+                                  <mat-label>Date</mat-label>
+                                  <input matInput [matDatepicker]="picker" formControlName="tour_date"
+                                    (focus)="picker.open()">
+                                  <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                                  <mat-datepicker #picker></mat-datepicker>
+                                </mat-form-field>
+                                <button *ngIf="$index>0" mat-icon-button color="warn" type="button"
+                                  (click)="removeGrouptour($index)">
+                                  <mat-icon>close</mat-icon>
+                                </button>
+                              </div>
+                              }
+
+                              <div class="add-input-btn">
+                                <button type="button" color="primary" (click)="addGroupTourDate()">
+                                  Add Date<mat-icon>add</mat-icon>
+                                </button>
+                              </div>
+                            </div>
+                            
+                          </div>
+
+                        </div>
+                        }
+
+                        <div class="dynamic-input-container">
+                          <h4>Inclusions</h4>
+                          <div formArrayName="inclusions">
+                            @for (inclusion of inclusionsArray.controls; track $index) {
+                            <div class="inclusion-repet" [formGroupName]="$index">
+                              <mat-form-field class="example-full-width" appearance="outline">
+                                <mat-label>Enter Inclusions</mat-label>
+                                <input matInput [formControlName]="'text'">
+                              </mat-form-field>
+                              <button *ngIf="$index>0" mat-icon-button color="warn" type="button"
+                                (click)="removeInclusion($index)">
+                                <mat-icon>delete</mat-icon>
+                              </button>
+                            </div>
+                            }
+                          </div>
+                          <div class="add-input-btn">
+                            <button type="button" color="primary" (click)="addInclusion()">
+                              Add Inclusions<mat-icon>add</mat-icon>
+                            </button>
+                          </div>
+                        </div>
+
+                        <div class="dynamic-input-container">
+                          <h4>Exclusions</h4>
+                          <div formArrayName="exclusions">
+                            @for (exclusions of exclusionsArray.controls; track $index) {
+                            <div class="inclusion-repet" [formGroupName]="$index">
+                              <mat-form-field class="example-full-width" appearance="outline">
+                                <mat-label>Enter Exclusions</mat-label>
+                                <input matInput [formControlName]="'text'">
+                              </mat-form-field>
+                              <button *ngIf="$index>0" mat-icon-button color="warn" type="button"
+                                (click)="removeExclusion($index)">
+                                <mat-icon>delete</mat-icon>
+                              </button>
+                            </div>
+                            }
+                          </div>
+                          <div class="add-input-btn">
+                            <button type="button" color="primary" (click)="addExclusion()">
+                              Add Exclusions<mat-icon>add</mat-icon>
+                            </button>
+                          </div>
+                        </div>
+
+                        <div class="trip-highlit-sec">
+                          <h6> Trip Highlights Description</h6>
+                          <div class="NgxEditor__Wrapper">
+                            <ngx-editor-menu [editor]="editor!" [toolbar]="toolbar!"> </ngx-editor-menu>
+                            <ngx-editor [editor]="editor!" [placeholder]="'Type here...'" class="NgxEditorStyles"
+                              formControlName="trip_highlights"></ngx-editor>
+                          </div>
+                          <mat-error *ngIf="basicInfoForm.get('trip_highlights')?.hasError('required')">
+                            Trip highlights description is required
+                          </mat-error>
+                        </div>
+                        <!-- <mat-form-field class="example-full-width" appearance="outline">
+                          <mat-label>Last Name</mat-label>
+                          <input matInput formControlName="lastName" required>
+                        </mat-form-field> -->
+                        <div>
+                          <h4>SEO Tags</h4>
+                          <mat-form-field class="example-full-width" appearance="outline">
+                            <mat-label>Meta Title</mat-label>
+                            <input matInput formControlName="meta_title" required>
+                          </mat-form-field>
+                          <mat-form-field class="example-full-width" appearance="outline">
+                            <mat-label>Meta Description</mat-label>
+                            <textarea matInput formControlName="meta_description" rows="5"></textarea>
+                          </mat-form-field>
+                          <mat-form-field class="example-full-width" appearance="outline">
+                            <mat-label>Meta Keywords</mat-label>
+                            <textarea matInput formControlName="meta_keywords"></textarea>
+                          </mat-form-field>
+                          <mat-form-field class="example-full-width" appearance="outline">
+                            <mat-label>Meta Tags</mat-label>
+                            <textarea matInput formControlName="meta_tags" rows="10"></textarea>
+                          </mat-form-field>
+                        </div>
+                        <div>
+                          <h4>Cancelation Policies</h4>
+                          <div formArrayName="cancelation_policies">
+                             @for (cancellation of cancellationPolicyArray.controls; track $index) {
+                            <div class="cancellation mb-3" [formGroupName]="$index">
+                              <div class="form-control">
+                                Min: <input type="number"  aria-describedby="basic-addon1" min="0" max="28" (input)="updatePolicyText($index)" formControlName="min_days">  
+                              </div>
+
+                              <div class="form-control">
+                                Max: <input type="number"  aria-describedby="basic-addon1" min="0" max="60" (input)="updatePolicyText($index)" formControlName="max_days">
+                              </div>
+
+                              <div class="form-control">
+                                Percentage: <input type="number"  aria-describedby="basic-addon2" min="0" max="100" (input)="updatePolicyText($index)" formControlName="percentage">
+                              </div>
+                                
+                              <div class="form-control">
+                                Policy: <input type="text"  aria-describedby="basic-addon3" formControlName="policy">
+                              </div>       
+
+                              </div>
+                            }
+                          </div>
+                        </div>
+                        <div class="buton-group">
+                          <button mat-raised-button color="primary"
+                            [disabled]="basicInfoSaving" (click)="basicInfoSubmit()">{{
+                            basicInfoSaving?'Saving...':'Save & Next' }}</button>
+                          <button mat-raised-button color="primary" [disabled]="(packageId=='')"
+                            matStepperNext>Next</button>
+                        </div>
+                      </form>
+                    </mat-step>
+                    <mat-step [stepControl]="routeDestinationForm" label="Step 2">
+                      <ng-template matStepLabel>Upload Images</ng-template>
+                      <div class="routes-gllry">
+                        <div class="uploaded-mage" *ngFor="let preview of packageImagePreviews; let i=index;">
+                          <a href="javascript:void(0);" class="remove-img" (click)="removePackageImage(preview, i)"
+                            matTooltip="Remove Image" [matTooltipPosition]="'left'"><mat-icon
+                              class="close-icon">close</mat-icon></a>
+                          @if(preview?.id){
+                          <a href="javascript:void(0);" class="add-tag" (click)="addImageTag(preview)"
+                            matTooltip="Add Image Alt Tag" [matTooltipPosition]="'left'"><mat-icon>add</mat-icon></a>
+                          }
+                          <img [src]="preview.img" />
+                        </div>
+                        <mat-card class="upload-card" (click)="fileInput.click()">
+                          <mat-card-content>
+                            <mat-icon fontSize="large" class="upload-icon">upload</mat-icon>
+                            <p>Upload Photos</p>
+                            <input #fileInput type="file" (change)="onPackageImageSelected($event)" accept="image/*"
+                              multiple hidden>
+                          </mat-card-content>
+                        </mat-card>
+
+                      </div>
+                      <div class="buton-group">
+                        <button mat-raised-button matStepperPrevious color="warn" class="msr-2">Back</button>
+                        <button mat-raised-button color="primary"
+                          [disabled]="(packageSelectedFiles.length==0 || packageImgUploading)"
+                          (click)="packageImageUpload()">{{ packageImgUploading?'Uploading...':'Save & Next' }}</button>
+                        <button mat-raised-button color="primary" [disabled]="(packageImagePreviews.length==0)"
+                          matStepperNext>Next</button>
+                      </div>
+                    </mat-step>
+                    <mat-step [stepControl]="routeDestinationForm" label="Step 3">
+                      <ng-template matStepLabel>Fill Destination Routes</ng-template>
+                      <form [formGroup]="tripForms">
+                        <div formArrayName="routes">
+                          @for (trip_route of tripRoutes; track $index; let routeIndex = $index) {
+                          <div [formGroupName]="routeIndex">
+                            <div class="roomtype-list ng-star-inserted">
+                              <div class="roomname-label">
+                                <div class="roomstndrd">Destination Routes</div>
+                                <!-- <button mat-icon-button (click)="editDestinationRoute(trip_route, routeIndex)">
+                                  <mat-icon>edit</mat-icon>
+                                </button> -->
+                              </div>
+                              <ul>
+                                <li>{{trip_route.route.route_name}}</li>
+                                <li>{{trip_route.no_of_days_stay}} days</li>
+                              </ul>
+
+                              <!-- <button mat-icon-button (click)="deleteDestinationRoute(trip_route)" class="text-danger">
+                                <mat-icon>delete</mat-icon>
+                              </button> -->
+                              <div class="all-days-information">
+                                <mat-accordion>
+                                  <div formArrayName="days">
+                                    @for (day of generateArray(trip_route.no_of_days_stay, routeIndex); track day; let
+                                    dayIndex =
+                                    $index) {
+
+                                    <mat-expansion-panel [formGroupName]="dayIndex">
+                                      <mat-expansion-panel-header>
+                                        <mat-panel-title>
+                                          <span>Day {{ day }}</span>
+                                        </mat-panel-title>
+                                      </mat-expansion-panel-header>
+
+                                      <div class="day-waise">
+                                        <!-- Trip Details Form -->
+                                        @if (!getDayForm(routeIndex, dayIndex).get('isSaved')?.value) {
+                                        <div formGroupName="tripDetails">
+                                          <mat-form-field class="example-full-width" appearance="outline">
+                                            <mat-label>Enter Trip Title</mat-label>
+                                            <input matInput formControlName="title">
+                                          </mat-form-field>
+
+                                          <div class="short-description-day">
+                                            <mat-form-field class="example-full-width mb-3" appearance="outline">
+                                              <mat-label>Enter Trip Description</mat-label>
+                                              <textarea matInput formControlName="description"></textarea>
+                                            </mat-form-field>
+                                          </div>
+
+                                          <div class="button-container">
+                                            <button mat-raised-button color="primary"
+                                              (click)="saveTripDetails(trip_route, routeIndex, dayIndex, day)"
+                                              [disabled]="getDayForm(routeIndex, dayIndex).get('tripDetails')?.invalid">
+                                              {{ btnSaving ? 'Saving...' : 'Save Details' }}
+                                            </button>
+                                            &nbsp;
+                                            <button mat-raised-button color="warning"
+                                              *ngIf="getDayForm(routeIndex, dayIndex).get('isEdit')?.value"
+                                              (click)="closeTripDetailsForm(routeIndex, dayIndex)">Close</button>
+                                          </div>
+                                        </div>
+                                        }
+
+                                        <!-- Saved Trip Details View -->
+                                        @if (getDayForm(routeIndex, dayIndex).get('isSaved')?.value) {
+                                        <div class="saved-details">
+                                          <div class="title-section">
+                                            <h3>{{ getDayForm(routeIndex, dayIndex).get('tripDetails.title')?.value }}
+                                            </h3>
+                                            <button mat-icon-button (click)="editTripDetails(routeIndex, dayIndex)">
+                                              <mat-icon>edit</mat-icon>
+                                            </button>
+                                          </div>
+                                          <div class="savedecription">
+                                            <p>{{ getDayForm(routeIndex, dayIndex).get('tripDetails.description')?.value
+                                              }}</p>
+                                          </div>
+                                        </div>
+
+                                        <div cdkDropList (cdkDropListDropped)="drop($event, routeIndex, dayIndex)">
+                                          @for (section of daySections[routeIndex + '_' + dayIndex]; track $index) {
+                                          <div cdkDrag class="drag-section">
+                                            <!-- Activity Section -->
+                                            @if (section.itinerary_type === "activities") {
+                                            <div class="roomtype-list ng-star-inserted">
+                                              <div class="roomname-label">
+                                                <div class="roomstndrd">Activity</div>
+                                                <div class="roomupdate">
+                                                  <mat-icon cdkDragHandle class="drag-handle">drag_indicator</mat-icon>
+                                                  <a href="javascript:void(0);"
+                                                    (click)="editActivity(routeIndex, dayIndex, section)">
+                                                    <mat-icon>edit</mat-icon>
+                                                  </a>
+                                                  <a href="javascript:void(0);"
+                                                    (click)="deleteActivity(section.id, routeIndex, dayIndex, $index)">
+                                                    <mat-icon>delete</mat-icon>
+                                                  </a>
+                                                </div>
+                                              </div>
+                                              <ul>
+                                                <li>{{ section?.tour_activity?.activity_title }}</li>
+                                                <!-- <li>{{ section?.tour_activity?.activity_description }}</li> -->
+                                                @for (active_image of section.tour_activity.tour_activity_experiences;
+                                                track $index) {
+                                                <li>{{ active_image?.experience_title }}</li>
+                                                }
+                                              </ul>
+                                            </div>
+                                            }
+
+                                            <!-- Stay Section -->
+                                            @if (section.itinerary_type === "stay") {
+                                            <div class="roomtype-list ng-star-inserted">
+                                              <div class="roomname-label">
+                                                <div class="roomstndrd">Stays</div>
+                                                <div class="roomupdate">
+                                                  <mat-icon cdkDragHandle class="drag-handle">drag_indicator</mat-icon>
+                                                  <a href="javascript:void(0);"
+                                                    (click)="editStay(routeIndex, dayIndex, trip_route, section, day)">
+                                                    <mat-icon>edit</mat-icon>
+                                                  </a>
+                                                  <a href="javascript:void(0);"
+                                                    (click)="deleteStay(section.id, routeIndex, dayIndex, $index)">
+                                                    <mat-icon>delete</mat-icon>
+                                                  </a>
+                                                </div>
+                                              </div>
+                                              <ul>
+                                                <li>{{ section?.tour_stay?.stay_title }}</li>
+                                                <li>Check In: {{ section?.tour_stay?.check_in_time }}</li>
+                                                <li>Check Out: {{ section?.tour_stay?.check_out_time }}</li>
+                                                <li>Room: {{ section?.tour_stay?.room.name }}</li>
+                                              </ul>
+                                            </div>
+                                            }
+
+                                            <!-- Transfer Section -->
+                                            @if (section.itinerary_type === "transfer") {
+                                            <div class="roomtype-list ng-star-inserted" id="transfer-{{section?.id}}">
+                                              <div class="roomname-label">
+                                                <div class="roomstndrd">Transfers</div>
+                                                <div class="roomupdate">
+                                                  <mat-icon cdkDragHandle class="drag-handle">drag_indicator</mat-icon>
+                                                  <a href="javascript:void(0);"
+                                                    (click)="editTransfer(routeIndex, dayIndex, $index, section, day)">
+                                                    <mat-icon>edit</mat-icon>
+                                                  </a>
+                                                  <a href="javascript:void(0);"
+                                                    (click)="deleteTransfer(section.id, routeIndex, dayIndex, $index)">
+                                                    <mat-icon>delete</mat-icon>
+                                                  </a>
+                                                </div>
+                                              </div>
+                                              <ul>
+                                                <li>{{ section?.tour_transfer?.transfer_title }}</li>
+                                                <li>{{ section?.tour_transfer?.transfer_type }}</li>
+                                                <li>{{ section?.tour_transfer?.details?.vehicle_type }}</li>
+                                                <li>Pickup: {{ section?.tour_transfer?.details?.pickup_location }}</li>
+                                                @if(section?.tour_transfer?.details?.halts?.length>0){
+                                                <li>Halts:
+                                                  @for (halt of section?.tour_transfer?.details?.halts; track $index) {
+                                                  {{halt.halt_location}},
+                                                  }
+                                                </li>
+                                                }
+
+                                                <li>Drop: {{ section?.tour_transfer?.details?.dropoff_location }}</li>
+                                              </ul>
+                                            </div>
+                                            }
+                                          </div>
+                                          }
+                                        </div>
+
+                                        <!-- Action Buttons -->
+                                        <div class="add-button-sec" id="boxroutebutton-{{routeIndex}}-{{dayIndex}}">
+                                          <button mat-raised-button color="primary"
+                                            (click)="addActivity(routeIndex, dayIndex, day)">
+                                            <mat-icon>add</mat-icon> Add Activities
+                                          </button>
+                                          <button mat-raised-button color="primary"
+                                            (click)="addStay(routeIndex, dayIndex, trip_route, day)">
+                                            <mat-icon>add</mat-icon> Add Stay
+                                          </button>
+                                          <button mat-raised-button color="primary"
+                                            (click)="addTransfer(routeIndex, dayIndex, day)">
+                                            <mat-icon>add</mat-icon> Add Transfer
+                                          </button>
+                                        </div>
+
+                                        <!-- Activities Section -->
+                                        <div formArrayName="activities" #activityForm>
+                                          @for (activity of getActivities(routeIndex, dayIndex).controls; track
+                                          activity; let activityIndex = $index) {
+                                          <div [formGroupName]="activityIndex" class="activity-form"
+                                            *ngIf="activity.value.add_new">
+                                            <!-- Activity form fields -->
+                                            <div class="activity-detals-sec">
+                                              <div class="days-heding">
+                                                <h6>{{activity.value.id?'Edit':'Add'}} Activity</h6>
+                                                <a href="javascript:void(0);"
+                                                  (click)="closeActivity(routeIndex, dayIndex, activityIndex)"><mat-icon>close</mat-icon></a>
+                                              </div>
+
+                                              <div>
+                                                <div formGroupName="activityDetails">
+                                                  <mat-form-field class="example-full-width mb-2" appearance="outline">
+                                                    <mat-label>Activity Title</mat-label>
+                                                    <input matInput formControlName="activity_title">
+                                                  </mat-form-field>
+                                                </div>
+                                                <div class="routes-images">
+
+                                                  <h6>Uploads Itinerary Slider Images</h6>
+
+                                                  <div class="routes-gllry" formArrayName="images">
+
+                                                    @for (imageControl of getItineraryImages(routeIndex, dayIndex,
+                                                    activityIndex).controls; track imageControl; let imageIndex =
+                                                    $index) {
+                                                    <div class="uploaded-mage" [formGroupName]="imageIndex">
+                                                      <a href="javascript:void(0);" class="remove-img"
+                                                        matTooltip="Remove Image" [matTooltipPosition]="'left'"
+                                                        (click)="removeImage(routeIndex, dayIndex, activityIndex, imageIndex)"><mat-icon
+                                                          class="close-icon">close</mat-icon></a>
+                                                      <img [src]="imageControl.get('preview')?.value" />
+                                                    </div>
+                                                    }
+
+
+                                                    <mat-card class="upload-card" (click)="itineraryFileInput.click()">
+                                                      <mat-card-content>
+                                                        <mat-icon fontSize="large" class="upload-icon">upload</mat-icon>
+                                                        <p>Upload Images</p>
+                                                        <input #itineraryFileInput type="file" [multiple]="true"
+                                                          accept="image/*"
+                                                          (change)="onFileSelected($event, routeIndex, dayIndex, activityIndex)"
+                                                          hidden>
+                                                      </mat-card-content>
+                                                    </mat-card>
+
+                                                  </div>
+
+                                                </div>
+                                                <div class="button-container">
+                                                  <button mat-raised-button color="primary"
+                                                    [disabled]="!isActivityValid(routeIndex, dayIndex, activityIndex)"
+                                                    (click)="saveActivity(routeIndex, dayIndex, activityIndex, day)">
+                                                    {{ btnSaving ? 'Saving...' : 'Save Activity' }}
+                                                  </button>
+                                                </div>
+                                              </div>
+                                              @if (getActivityImagesArray(routeIndex, dayIndex,
+                                              activityIndex).controls.length > 0) {
+                                              <div class="mt-3">
+                                                <h6>You'll be exploring these incredible experiences. </h6>
+                                              </div>
+
+                                              <div class="all-experiance" formArrayName="activityImages">
+                                                @for (activityImage of getActivityImagesArray(routeIndex, dayIndex,
+                                                activityIndex).controls; track activityImage; let imageIndex = $index) {
+                                                <div class="eprence-label" [formGroupName]="imageIndex">
+                                                  <a href="javascript:void(0);" class="close-btn"
+                                                    matTooltip="Remove Image" [matTooltipPosition]="'left'"
+                                                    (click)="removeActivityImage(routeIndex, dayIndex, activityIndex, imageIndex)"><mat-icon>close</mat-icon></a>
+                                                  @if (!activityImage.get('preview')?.value) {
+                                                  <mat-card class="upload-card" (click)="activityFileInput.click()">
+                                                    <mat-card-content>
+                                                      <mat-icon fontSize="large" class="upload-icon">upload</mat-icon>
+                                                      <p>Upload Image</p>
+                                                      <input #activityFileInput type="file" accept="image/*"
+                                                        (change)="onActivityImageSelected($event, routeIndex, dayIndex, activityIndex, imageIndex)"
+                                                        hidden>
+                                                    </mat-card-content>
+                                                  </mat-card>
+                                                  }
+                                                  @if (activityImage.get('preview')?.value) {
+                                                  <div class="uploaded-mage">
+                                                    <a href="javascript:void(0);" class="remove-img"
+                                                      (click)="removeImageActivity(routeIndex, dayIndex, activityIndex, imageIndex)"><mat-icon
+                                                        class="close-icon">close</mat-icon></a>
+                                                    <img [src]="activityImage.get('preview')?.value" />
+                                                  </div>
+                                                  }
+                                                  <mat-form-field class="example-full-width" appearance="outline">
+                                                    <mat-label>Enter Activity place name </mat-label>
+                                                    <input matInput formControlName="experiences">
+                                                  </mat-form-field>
+
+                                                </div>
+                                                <div class="button-container">
+                                                  <button mat-raised-button color="primary"
+                                                    [disabled]="!isActivityImageValid(routeIndex, dayIndex, activityIndex)"
+                                                    (click)="saveActivityExperience(routeIndex, dayIndex, activityIndex, imageIndex)">Save
+                                                    Experience
+                                                  </button>
+                                                </div>
+                                                }
+                                                <div class="add-input-btn">
+                                                  <button color="primary"
+                                                    (click)="addActivityImage(routeIndex, dayIndex, activityIndex)">
+                                                    Add Experience<mat-icon>add</mat-icon>
+                                                  </button>
+                                                </div>
+
+                                              </div>
+                                              }
+                                              @if (getActivityImagesArray(routeIndex, dayIndex,
+                                              activityIndex).controls.length <= 0) { <div class="add-input-btn">
+                                                <button color="primary"
+                                                  (click)="addActivityImage(routeIndex, dayIndex, activityIndex)">
+                                                  Add Experience<mat-icon>add</mat-icon>
+                                                </button>
+                                            </div>
+                                            }
+                                            <div class="button-container mt-3"
+                                              *ngIf="isActivityImageValid(routeIndex, dayIndex, activityIndex)">
+                                              <button mat-raised-button color="primary" [disabled]="!saveExp"
+                                                (click)="closeActivity(routeIndex, dayIndex, activityIndex)">
+                                                Continue
+                                              </button>
+                                            </div>
+
+
+
+                                          </div>
+                                        </div>
+                                        }
+                                      </div>
+
+                                      <!-- Stays Section -->
+                                      <div formArrayName="stays" #stayForm>
+                                        @for (stay of getStays(routeIndex, dayIndex).controls; track stay; let stayIndex
+                                        = $index) {
+                                        <div [formGroupName]="stayIndex" *ngIf="stay?.value?.add_new">
+                                          <!-- Stay form fields -->
+                                          <div class="activity-detals-sec">
+                                            <div class="days-heding">
+                                              <h6>{{stay.value?.id?'Edit':'Add'}} Stay</h6>
+                                              <a href="javascript:void(0)"
+                                                (click)="closeStay(routeIndex, dayIndex, stayIndex)"><mat-icon>close</mat-icon></a>
+                                            </div>
+
+                                            <div>
+                                              <mat-form-field class="example-full-width mb-2" appearance="outline">
+                                                <mat-label>Enter Stay Title</mat-label>
+                                                <input matInput formControlName="stay_title">
+                                              </mat-form-field>
+
+                                            </div>
+                                            <mat-form-field class="example-full-width" appearance="outline">
+                                              <mat-label>Select Stay Category</mat-label>
+                                              <mat-select formControlName="room_id"
+                                                (selectionChange)="onRoomCategoryChange($event)">
+                                                @for (room of selectedRooms; track $index) {
+                                                <mat-option [value]="room.room?.id">{{room.room?.name}}</mat-option>
+                                                }
+                                              </mat-select>
+                                            </mat-form-field>
+
+                                            <div class="day-destination">
+
+                                              <p>Hotel Entry and Out time</p>
+                                              <div class="from-row">
+
+                                                <mat-form-field class="example-full-width mb-3" appearance="outline">
+                                                  <mat-label>Check In Time</mat-label>
+                                                  <input matInput [ngxTimepicker]="checkInTime" [format]="12"
+                                                    placeholder="Select time" formControlName="check_in_time">
+                                                  <mat-icon matSuffix (click)="checkInTime.open()">schedule</mat-icon>
+                                                  <ngx-material-timepicker #checkInTime></ngx-material-timepicker>
+                                                </mat-form-field>
+                                                <mat-form-field class="example-full-width mb-3" appearance="outline">
+                                                  <mat-label>Stay Night</mat-label>
+                                                  <mat-select formControlName="no_of_night_stay">
+                                                    <mat-option value="1">1N</mat-option>
+                                                    <mat-option value="2">2N</mat-option>
+                                                    <mat-option value="3">3N</mat-option>
+                                                    <mat-option value="4">4N</mat-option>
+                                                    <mat-option value="5">5N</mat-option>
+                                                    <mat-option value="6">6N</mat-option>
+                                                    <mat-option value="7">7N</mat-option>
+                                                  </mat-select>
+                                                </mat-form-field>
+                                                <!-- <mat-form-field class="example-full-width mb-3" appearance="outline">
+                                                  <mat-label>Check Out</mat-label>
+                                                  <input matInput [owlDateTimeTrigger]="checkOutTime"
+                                                    [owlDateTime]="checkOutTime" formControlName="check_out_time">
+                                                  <mat-icon matSuffix [owlDateTimeTrigger]="checkOutTime"
+                                                    class="date-icon">schedule</mat-icon>
+                                                  <owl-date-time [pickerType]="'timer'" #checkOutTime></owl-date-time>
+                                                </mat-form-field> -->
+                                                <mat-form-field class="example-full-width mb-3" appearance="outline">
+                                                  <mat-label>Check In Time</mat-label>
+                                                  <input matInput [ngxTimepicker]="checkOutTime" [format]="12"
+                                                    placeholder="Select time" formControlName="check_out_time">
+                                                  <mat-icon matSuffix (click)="checkOutTime.open()">schedule</mat-icon>
+                                                  <ngx-material-timepicker #checkOutTime></ngx-material-timepicker>
+                                                </mat-form-field>
+                                              </div>
+
+                                            </div>
+
+                                            <div>
+                                              <h6>Stays will be allocated based on availability or similar category</h6>
+
+                                            </div>
+                                            <mat-form-field class="example-full-width" appearance="outline">
+                                              <mat-label>Select Hotel</mat-label>
+                                              <mat-select formControlName="hotels" multiple>
+                                                @for (hotel of routeWiseHotels; track $index) {
+                                                <mat-option [value]="hotel.id">{{hotel.hotel_name}}</mat-option>
+                                                }
+                                              </mat-select>
+                                            </mat-form-field>
+                                            <div class="meal-sec">
+                                              <mat-form-field class="example-full-width" appearance="outline">
+                                                <mat-label>Add Meals</mat-label>
+                                                <mat-select formControlName="meals" multiple>
+                                                  <mat-option [value]="'is_breakfast'">Breakfast</mat-option>
+                                                  <mat-option [value]="'is_lunch'">Lunch</mat-option>
+                                                  <mat-option [value]="'is_dinner'">Dinner</mat-option>
+                                                  <mat-option [value]="'is_dinner_or_lunch'">Dinner or
+                                                    Lunch</mat-option>
+                                                </mat-select>
+                                              </mat-form-field>
+                                              <!-- <mat-checkbox formControlName="is_breakfast">Breakfast</mat-checkbox> -->
+                                              <!-- <mat-checkbox formControlName="is_lunch">Lunch</mat-checkbox>
+                                              <mat-checkbox formControlName="is_dinner">Dinner</mat-checkbox>
+                                              <mat-checkbox formControlName="is_dinner_or_lunch">Dinner or Lunch</mat-checkbox> -->
+                                            </div>
+
+                                            <div class="button-container">
+                                              <button mat-raised-button color="primary"
+                                                [disabled]="!isStayValid(routeIndex, dayIndex, stayIndex)"
+                                                (click)="saveStay(routeIndex, dayIndex, stayIndex)">
+                                                {{ btnSaving ? 'Saving...' : 'Save Details' }}
+                                              </button>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        }
+                                      </div>
+
+                                      <!-- Transfers Section -->
+                                      <div formArrayName="transfers" #transferForm>
+                                        @for (transfer of getTransfers(routeIndex, dayIndex).controls; track transfer;
+                                        let transferIndex = $index) {
+                                        <div [formGroupName]="transferIndex" *ngIf="transfer?.value?.add_new">
+                                          <!-- Transfer form fields -->
+                                          <div class="tranfer-detals-sec">
+                                            <div class="days-heding">
+                                              <h6>{{transfer.value?.id?'Edit':'Add'}} Transfer</h6>
+                                              <a href="javascript:void(0);"
+                                                (click)="closeTransfer(routeIndex, dayIndex, transferIndex)"><mat-icon>close</mat-icon></a>
+                                            </div>
+
+                                            <div>
+                                              <mat-form-field class="example-full-width" appearance="outline">
+                                                <mat-label>Transfer Title</mat-label>
+                                                <input matInput formControlName="transfer_title" required>
+                                              </mat-form-field>
+                                            </div>
+                                            <div>
+                                              <mat-form-field class="example-full-width mb-2" appearance="outline">
+                                                <mat-label>Select Transfer Type</mat-label>
+                                                <mat-select formControlName="transfer_type" required>
+                                                  <mat-option value="Private Transfer">Private Transfer</mat-option>
+                                                  <mat-option value="Shared Transfer">Shared Transfer</mat-option>
+                                                </mat-select>
+                                              </mat-form-field>
+                                            </div>
+
+                                            <div>
+                                              <mat-form-field class="example-full-width" appearance="outline">
+                                                <mat-label>Enter Vehicle Type or Name</mat-label>
+                                                <input matInput formControlName="vehicle_type" required>
+                                              </mat-form-field>
+                                            </div>
+
+                                            <div class="day-destination">
+
+                                              <p>Enter Destination</p>
+                                              <div class="from-tranfer">
+
+                                                <mat-form-field class="example-full-width" appearance="outline">
+                                                  <mat-label>Form</mat-label>
+                                                  <input matInput formControlName="pickup_location" required>
+                                                </mat-form-field>
+
+                                                <div formArrayName="halts" class="via-hhalt">
+                                                  @for (halt of getHalts(transfer).controls; track halt; let haltIndex =
+                                                  $index) {
+                                                  <div [formGroupName]="haltIndex">
+                                                    <mat-form-field class="example-full-width" appearance="outline">
+                                                      <mat-label>Enter Halt Name</mat-label>
+                                                      <input matInput formControlName="halt_location">
+                                                      <button mat-icon-button matSuffix
+                                                        (click)="removeHalt(transfer, haltIndex)">
+                                                        <mat-icon>close</mat-icon>
+                                                      </button>
+                                                    </mat-form-field>
+                                                  </div>
+                                                  }
+
+                                                  <div class="add-input-btn">
+                                                    <button color="primary" type="button" (click)="addHalt(transfer)">
+                                                      Add <mat-icon>add</mat-icon>
+                                                    </button>
+                                                  </div>
+                                                </div>
+
+                                                <mat-form-field class="example-full-width" appearance="outline">
+                                                  <mat-label>To</mat-label>
+                                                  <input matInput formControlName="dropoff_location" required>
+                                                </mat-form-field>
+                                                <div class="button-container">
+                                                  <button mat-raised-button color="primary"
+                                                    [disabled]="!isFormValid(routeIndex, dayIndex)"
+                                                    (click)="saveTransfers(routeIndex, dayIndex, transferIndex, day)">
+                                                    {{ btnSaving ? 'Saving...' : 'Save Details' }}
+                                                  </button>
+                                                  <button mat-button type="button" color="warn"
+                                                    (click)="resetTransferForm(routeIndex, dayIndex)">
+                                                    Reset
+                                                  </button>
+                                                </div>
+                                              </div>
+
+                                            </div>
+
+
+
+                                          </div>
+                                        </div>
+                                        }
+                                      </div>
+
+                                      }
+                                  </div>
+                                  </mat-expansion-panel>
+                                  }
+                              </div>
+                              </mat-accordion>
+                            </div>
+                          </div>
+                        </div>
+                        }
+                </div>
+                </form>
+
+
+                <form [formGroup]="routeDestinationForm">
+                  <ng-container *ngIf="showAddRouteForm">
+                    <div class="dynamic-input-container">
+                      <h6>Add Destination Routes</h6>
+                      <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Select Route</mat-label>
+                        <mat-select formControlName="route_id">
+                          @for (route of routeList; track $index) {
+                          <mat-option [value]="route.id">{{ route.route_name }}</mat-option>
+                          }
+                        </mat-select>
+                        <mat-error *ngIf="routeDestinationForm.get('route_id')?.hasError('required')">
+                          Route is required
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div class="choose-trip-duration-sec">
+                      <h6>Trip Duration</h6>
+                      <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Enter Stay days</mat-label>
+                        <input matInput type="number" placeholder="Example: 42" min="0" max="100" step="1"
+                          formControlName="no_of_days_stay">
+                        <mat-error *ngIf="routeDestinationForm.get('no_of_days_stay')?.hasError('required')">
+                          This field is required
+                        </mat-error>
+                      </mat-form-field>
+
+                    </div>
+
+                    <div>
+                      <button mat-raised-button (click)="cancelDestinationRoute()" color="warn"
+                        class="msr-2">Cancel</button>
+                      <button mat-raised-button color="primary"
+                        [disabled]="(!routeDestinationForm.valid || destinationRouteSave)"
+                        (click)="routeDestinationSubmit()">Save & Next</button>
+                    </div>
+                  </ng-container>
+                  <div class="buton-group" *ngIf="!showAddRouteForm">
+                    <button mat-raised-button matStepperPrevious color="warn" class="msr-2">Back</button>
+                    <button mat-raised-button color="primary" [disabled]="dayCount>=tripDuration"
+                      (click)="addDestinationForm()">Add Destination</button>
+                    <button mat-raised-button color="primary" matStepperNext>Next</button>
+                  </div>
+                </form>
+                </mat-step>
+
+                <mat-step [stepControl]="setPriceForm" label="Step 3">
+                  <ng-template matStepLabel>Set Price</ng-template>
+                  <!-- @for (trip_price of tripPrices; track $index) {
+                  <div class="roomtype-list ng-star-inserted">
+                    <div class="roomname-label">
+                      <div class="roomstndrd"> Price for {{trip_price.room.name}} </div>
+                      <div class="roomupdate">
+                        <a href="javascript:void(0);" (click)="editPriceDetails(trip_price)">
+                          <mat-icon>edit</mat-icon>
+                        </a>
+                        <a href="javascript:void(0);">
+                          <mat-icon>delete</mat-icon>
+                        </a>
+                      </div>
+                    </div>
+                    <ul>
+                      <li>Base Price: ₹{{trip_price.price}}</li>
+                      <li>Offer Price: ₹{{trip_price.offer_price}}</li>
+                    </ul>
+                  </div>
+                  } -->
+
+                  <div class="price-set">
+                    <div class="pricetable">
+                      <div class="manageRateDterom">
+                        <div class="manageRateDteromtop">
+                          <div class="leftlabel">
+                            <strong>
+                              <mat-icon
+                                class="mat-icon notranslate material-icons mat-ligature-font mat-icon-no-color">bed</mat-icon>
+                              Stay Category
+                            </strong>
+                          </div>
+                          <div class="epdatarow">
+                            <ul>
+                              @if(packageData?.package_type=='Group Tour'){
+                              <li><strong><span class="material-icons">group</span></strong><b>1</b></li>
+                              }
+                              @else {
+                              @for (person of personCounts; track person) {
+                              <li><strong><span
+                                    class="material-icons">group</span></strong><b>{{(person==2?'1-'+person:person)}}</b>
+                              </li>
+                              }
+                              }
+
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                      @for (trip_room of selectedRooms; track $index) {
+                      <div class="manageRateecpan">
+                        <div class="mangeInputLst">
+                          <div class="mangeInputLsthdng">
+                            <div class="leftlabel cursor-pointer">
+                              <strong>
+                                <span>{{trip_room.room.name}}</span>
+                              </strong>
+                            </div>
+                            <div class="epdatarow">
+                              <ul>
+                                <div class="price-label">
+                                  <div>Base Price</div>
+                                  <div>Offer Price</div>
+                                  <div>Extra Adult</div>
+                                </div>
+                                <!-- @for (price of getRoompriceData(trip_room?.room?.id); track $index) {} -->
+                                @if(packageData?.package_type=='Group Tour'){
+                                <li>
+                                  <input placeholder="" type="text" min="0"
+                                    [(ngModel)]="getRoompriceData(trip_room?.room?.id, 2).price"
+                                    (blur)="updatePrice(getRoompriceData(trip_room?.room?.id, 2))">
+                                  <input placeholder="" type="text" min="0"
+                                    [(ngModel)]="getRoompriceData(trip_room?.room?.id, 2).offer_price"
+                                    (blur)="updatePrice(getRoompriceData(trip_room?.room?.id, 2))">
+                                  <input placeholder="" type="text" min="0"
+                                    [(ngModel)]="getRoompriceData(trip_room?.room?.id, 2).extra_adult_price"
+                                    (blur)="updatePrice(getRoompriceData(trip_room?.room?.id, 2))">
+                                </li>
+                                }
+                                @else {
+                                @for (person of personCounts; track person) {
+                                <li>
+                                  <input placeholder="" type="text" min="0"
+                                    [(ngModel)]="getRoompriceData(trip_room?.room?.id, person).price"
+                                    (blur)="updatePrice(getRoompriceData(trip_room?.room?.id, person))">
+                                  <input placeholder="" type="text" min="0"
+                                    [(ngModel)]="getRoompriceData(trip_room?.room?.id, person).offer_price"
+                                    (blur)="updatePrice(getRoompriceData(trip_room?.room?.id, person))">
+                                  <input placeholder="" type="text" min="0"
+                                    [(ngModel)]="getRoompriceData(trip_room?.room?.id, person).extra_adult_price"
+                                    (blur)="updatePrice(getRoompriceData(trip_room?.room?.id, person))">
+                                </li>
+                                }
+                                }
+
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      }
+                    </div>
+                  </div>
+
+                  <!-- <form [formGroup]="setPriceForm">
+                    <div class="addprice-sec">
+                      <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Select Stay Category</mat-label>
+                        <mat-select formControlName="room_id">
+                          @for (room of selectedRooms; track $index) {
+                          <mat-option [value]="room.room?.id"
+                            [disabled]="tripRoomSelected.includes(room.room?.id)">{{room.room?.name}}</mat-option>
+                          }
+                        </mat-select>
+                        <mat-error *ngIf="setPriceForm.get('room_id')?.errors?.['required']">
+                          Select a stay category.
+                        </mat-error>
+                      </mat-form-field>
+                      <div class="from-row">
+
+                        <mat-form-field class="example-full-width" appearance="outline">
+                          <mat-label>Enter Base Price</mat-label>
+                          <input matInput formControlName="price">
+                          <mat-error *ngIf="setPriceForm.get('price')?.errors?.['required']">
+                            Price is required
+                          </mat-error>
+                          <mat-error *ngIf="setPriceForm.get('price')?.errors?.['min']">
+                            Price must be greater than 0
+                          </mat-error>
+                          <mat-error *ngIf="setPriceForm.get('price')?.errors?.['pattern']">
+                            Price must have maximum 2 decimal places
+                          </mat-error>
+                        </mat-form-field>
+
+                        <mat-form-field class="example-full-width" appearance="outline">
+                          <mat-label>Enter Offer Price</mat-label>
+                          <input matInput formControlName="offer_price">
+                          <mat-error *ngIf="setPriceForm.get('offer_price')?.errors?.['required']">
+                            Offer price is required
+                          </mat-error>
+                          <mat-error *ngIf="setPriceForm.get('offer_price')?.errors?.['min']">
+                            Offer price must be greater than 0
+                          </mat-error>
+                          <mat-error *ngIf="setPriceForm.get('offer_price')?.errors?.['pattern']">
+                            Offer price must have maximum 2 decimal places
+                          </mat-error>
+                          <mat-error *ngIf="setPriceForm.get('offer_price')?.errors?.['invalidOfferPrice']">
+                            Offer price must be less than regular price
+                          </mat-error>
+                        </mat-form-field>
+                      </div>
+                    </div>
+
+                    <div>
+                      <button mat-raised-button matStepperPrevious color="warn" class="msr-2">Back</button>
+                      <button mat-raised-button color="warn" class="msr-2" (click)="goBackListing()">Back to
+                        List</button>
+                      <button mat-raised-button color="primary" [disabled]="!setPriceForm.valid"
+                        (click)="sePriceFormSubmit()">{{ btnSaving ? 'Saving...' : 'Save' }}</button>
+                    </div>
+                  </form> -->
+                  <div>
+                    <button mat-raised-button matStepperPrevious color="warn" class="msr-2">Back</button>
+                    <button mat-raised-button color="warn" class="msr-2" (click)="goBackListing()">Back to
+                      List</button>
+                    <button mat-raised-button color="primary" (click)="sePriceFormSubmit()">{{ btnSaving ? 'Saving...' :
+                      'Save' }}</button>
+                  </div>
+
+                </mat-step>
+                </mat-vertical-stepper>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      }
+
+    </div>
+  </div>
+  </div>
+
+</section>

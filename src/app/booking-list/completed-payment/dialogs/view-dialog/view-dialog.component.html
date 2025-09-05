@@ -1,0 +1,141 @@
+<div class="addContainer">
+    <div class="modalHeader">
+        <div class="editRowModal">
+            <div class="modalHeader clearfix">
+                <div class="modal-about">
+                    <div class="p-t-5 font-17 font-b-500">
+                        {{dialogTitle}}</div>
+                </div>
+            </div>
+        </div>
+        <button mat-icon-button (click)="dialogRef.close()" class="modal-close-button" aria-label="Close dialog">
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+    <div mat-dialog-content class="viewModal">
+        <div class="row mt-3">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                <div class="card">
+                    <div class="booking-header">
+                        <div>
+                            <div class="booking-id">Booking #{{booking.order_id}}</div>
+                            <div>Created on {{booking.created_at|date:'MMMM d, yyyy'}}</div>
+                        </div>
+                        <!-- <span class="booking-status status-confirmed">{{getBookingStatus(booking)}}</span> -->
+                        <span class="booking-status badge" [ngClass]="getPaymentStatus(booking?.payment_status)">{{booking?.payment_status}}</span>
+                    </div>
+    
+                    <!-- <div class="action-buttons">
+                        <button class="btn btn-outline"><i class="fas fa-print"></i> Print</button>
+                        <button class="btn btn-outline"><i class="fas fa-envelope"></i> Email</button>
+                        <button class="btn btn-outline"><i class="fas fa-edit"></i> Edit</button>
+                        <button class="btn btn-danger"><i class="fas fa-times"></i> Cancel Booking</button>
+                    </div> -->
+                </div>
+            </div>
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                <div class="grid">
+                    <div class="card">
+                        <div class="card-title">
+                            <span>Customer Information</span>                            
+                        </div>
+                        <div class="info-group">
+                            <div class="info-label">Name</div>
+                            <div class="info-value">{{ booking.full_name }}</div>
+                        </div>
+                        <div class="info-group">
+                            <div class="info-label">Email</div>
+                            <div class="info-value">{{ booking.email }}</div>
+                        </div>
+                        <div class="info-group">
+                            <div class="info-label">Phone</div>
+                            <div class="info-value">{{ booking.country_code+booking.mobile_no }}</div>
+                        </div>
+                    </div>
+    
+                    <!-- Trip Information -->
+                    <div class="card">
+                        <div class="card-title">Trip Information</div>
+                        <div class="info-group">
+                            <div class="info-label">Package</div>
+                            <div class="info-value">{{booking.tour_package_name	}}</div>
+                        </div>
+                        <div class="info-group">
+                            <div class="info-label">Destination</div>
+                            <div class="info-value">{{booking.destination_routes}}</div>
+                        </div>
+                        <div class="info-group">
+                            <div class="info-label">Travel Dates</div>
+                            <div class="info-value">{{booking.travel_start_date}} - {{booking.travel_end_date}}</div>
+                        </div>
+                        <div class="info-group">
+                            <div class="info-label">Duration</div>
+                            <div class="info-value">{{booking.trip_duration}} days</div>
+                        </div>
+                        <div class="info-group">
+                            <div class="info-label">Number of Travelers</div>
+                            <div class="info-value">{{booking.traveler_no_of_adult}} Adults, {{booking.traveler_no_of_child}} Child</div>
+                        </div>
+                        <div class="info-group">
+                            <div class="info-label">Special Requests</div>
+                            <div class="info-value">{{booking.messages}}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Pricing Breakup</div>                    
+                        <div class="payment-details">
+                            <span>Original Price</span>
+                            <span>{{ booking?.main_price|currency:'INR':'symbol':'1.0-0' }}</span>
+                        </div>
+                        <div class="payment-details">
+                            <span>Offer Price</span>
+                            <span>{{ booking?.offer_price|currency:'INR':'symbol':'1.0-0' }}</span>
+                        </div>
+                        <div class="payment-details">
+                            <span>Payment Received</span>
+                            <span>{{ booking?.payment_received|currency:'INR':'symbol':'1.0-0' }}</span>
+                        </div>
+                        @if(booking?.payment_remaining){
+                            <div class="payment-details total">
+                                <span>Total Due</span>
+                                <span>{{ booking?.payment_remaining|currency:'INR':'symbol':'1.0-0' }}</span>
+                            </div>
+                        }                 
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Payment Information</div>
+                    @for (payment of booking?.payment_transaction; track payment) {
+                        <div class="payment-details total">
+                            <span>Date</span>
+                            <span>{{ payment.updated_at|date:'medium'}}</span>
+                        </div>
+                        <div class="payment-details">
+                            <span>Transaction ID</span>
+                            <span>{{ payment.payment_id}}</span>
+                        </div>
+                        <div class="payment-details">
+                            <span>Payment Method</span>
+                            <span>{{ payment.method}}</span>
+                        </div>
+                        <div class="payment-details">
+                            <span>Amount</span>
+                            <span>{{ payment?.amount|currency:'INR':'symbol':'1.0-0' }}</span>
+                        </div>
+                        <div class="payment-details">
+                            <span>Payment Status</span>
+                            <span>{{ payment?.status }}</span>
+                        </div>
+                    }
+                    
+                    <!-- <div class="action-buttons">
+                        <button class="btn btn-outline">View Invoice</button>
+                        <button class="btn btn-outline">Issue Refund</button>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

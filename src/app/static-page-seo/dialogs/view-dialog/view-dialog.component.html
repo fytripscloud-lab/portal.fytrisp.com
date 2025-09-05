@@ -1,0 +1,66 @@
+<div class="addContainer">
+    <div class="modalHeader">
+        <div class="editRowModal">
+            <div class="modalHeader clearfix">
+                <div class="modal-about">
+                    <div class="p-t-5 font-17 font-b-500">
+                        {{dialogTitle}}</div>
+                </div>
+            </div>
+        </div>
+        <button mat-icon-button (click)="dialogRef.close()" class="modal-close-button" aria-label="Close dialog">
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+    <div mat-dialog-content class="viewModal">
+        <div class="row mt-3">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                <div class="table-responsive">
+                    <table class="table" border="1">
+                        <tr>
+                            <td>Package</td>
+                            <td>{{review.tour_package?.package_name}}</td>
+                        </tr>
+                        <tr>
+                            <td>Rating</td>
+                            <td>{{review.rating}}</td>
+                        </tr>
+                        <tr>
+                            <td>Review</td>
+                            <td>{{review.review}}</td>
+                        </tr>
+                        <tr>
+                            <td>User Details</td>
+                            <td>
+                                {{review?.user_data?.name}}<br>
+                                {{review?.user_data?.email}}<br>
+                                {{review?.user_data?.mobile_number}}<br>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Status</td>
+                            <td>
+                                @if (review.is_active) {
+                                <div>
+                                    <span class="badge badge-solid-green">
+                                    Active</span>
+                                </div>
+                                }
+                                @else {
+                                <div>
+                                    <span class="badge badge-solid-red">
+                                    Inactive</span>
+                                </div>
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Created At</td>
+                            <td>{{review.created_at}}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

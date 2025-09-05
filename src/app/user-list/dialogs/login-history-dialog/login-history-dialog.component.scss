@@ -1,0 +1,239 @@
+.viewModal{
+    padding-left: 45px;;
+
+  
+    th {
+      background-color: #6200ea; // Material Primary Color
+      color: white;
+      text-transform: uppercase;
+      font-weight: bold;
+      padding: 12px;
+    }
+  
+    td {
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+    }
+  
+    /* Striped Row Effect */
+    tr:nth-child(even) {
+      background-color: #f0f4fa; /* Light gray for even rows */
+    }
+  
+    tr:nth-child(odd) {
+      background-color: #ffffff; /* White for odd rows */
+    }
+  
+    /* Hover effect */
+    tr:hover {
+      background-color: #e0e0e0;
+    }
+  
+    mat-header-cell {
+      text-align: left;
+    }
+  }
+  
+  .card {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.card-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Booking details styles */
+.booking-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+
+.booking-id {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.booking-status {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 500;
+    color: white;
+}
+
+.status-confirmed {
+    background-color: #22c55e;
+}
+
+.status-pending {
+    background-color: var(--warning);
+}
+
+.status-cancelled {
+    background-color: #ef4444;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.info-group {
+    margin-bottom: 15px;
+}
+
+.info-label {
+    font-size: 14px;
+    color: #64748b;
+    margin-bottom: 5px;
+}
+
+.info-value {
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.trip-timeline {
+    position: relative;
+    padding-left: 30px;
+    margin: 30px 0;
+}
+
+.timeline-item {
+    position: relative;
+    padding-bottom: 30px;
+}
+
+.timeline-item:last-child {
+    padding-bottom: 0;
+}
+
+.timeline-item:before {
+    content: "";
+    position: absolute;
+    left: -30px;
+    top: 0;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: #2563eb;
+    z-index: 1;
+}
+
+.timeline-item:after {
+    content: "";
+    position: absolute;
+    left: -23px;
+    top: 16px;
+    width: 2px;
+    height: calc(100% - 16px);
+    background-color: #e2e8f0;
+}
+
+.timeline-item:last-child:after {
+    display: none;
+}
+
+.timeline-date {
+    font-size: 14px;
+    color: #64748b;
+    margin-bottom: 5px;
+}
+
+.timeline-content {
+    background-color: #f8fafc;
+    border-radius: 6px;
+    padding: 15px;
+    border-left: 3px solid #2563eb;
+}
+
+.timeline-title {
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+/* Payment info styles */
+.payment-details {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.payment-details:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.total {
+    font-weight: bold;
+}
+
+/* Button styles */
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+.btn-primary {
+    background-color: '#2563eb';
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #1d4ed8;
+}
+
+.btn-outline {
+    background-color: transparent;
+    border: 1px solid #64748b;
+    color: #64748b;
+}
+
+.btn-outline:hover {
+    background-color: #64748b;
+    color: white;
+}
+
+.btn-danger {
+    background-color: #ef4444;
+    color: white;
+}
+
+.btn-danger:hover {
+    background-color: #dc2626;
+}
+
+.btn-small {
+    padding: 5px 10px;
+    font-size: 12px;
+}
+
+.action-buttons {
+    margin-top: 20px;
+}
+
+.action-buttons .btn {
+    margin-right: 10px;
+}

@@ -1,0 +1,101 @@
+<div class="addContainer">
+  <div class="modalHeader">
+    <div class="editRowModal">
+      <div class="modalHeader clearfix">
+        <div class="modal-about">
+          <div class="p-t-5 font-17 font-b-500">
+            {{dialogTitle}}</div>
+        </div>
+      </div>
+    </div>
+    <button mat-icon-button (click)="dialogRef.close()" class="modal-close-button" aria-label="Close dialog">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div mat-dialog-content>
+    <form class="register-form m-4" [formGroup]="paymentForm">
+      <div class="row">
+        <div class=" col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width mb-3" appearance="outline">
+            <mat-label>Service Type</mat-label>
+            <mat-select formControlName="service_type" (selectionChange)="getServiceProviderList($event.value)" required>
+              @for (type of servicePrviderType; track $index) {
+                <mat-option [value]="type.id">{{type.name}}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Service Provider</mat-label>
+            <mat-select formControlName="service_provider_id" required>
+              <mat-option>
+                <ngx-mat-select-search 
+                  [formControl]="searchCtrl"
+                  placeholderLabel="Search service provider..."
+                  noEntriesFoundLabel="No matching data found">
+                </ngx-mat-select-search>
+              </mat-option>
+              
+              @for (provider of filteredServiceProvider$ | async; track $index) {
+                <mat-option [value]="provider.id">
+                  {{provider.provider_name}}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class=" col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width mb-3" appearance="outline">
+            <mat-label>Deal Amount</mat-label>
+            <input type="number" matInput formControlName="deal_amount" step="any" required>
+          </mat-form-field>
+        </div>
+        <div class=" col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width mb-3" appearance="outline">
+            <mat-label>Paid Amount</mat-label>
+            <input type="number" matInput formControlName="paid_amount" step="any" required>
+          </mat-form-field>
+        </div>
+        <!-- <div class=" col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width mb-3" appearance="outline">
+            <mat-label>Comment</mat-label>
+            <textarea matInput formControlName="comment" rows="3"></textarea>
+          </mat-form-field>
+        </div> -->
+        <!-- <div class=" col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width mb-3" appearance="outline">
+            <mat-label>Payment Mode</mat-label>
+            <mat-select formControlName="payment_mode" required>
+              <mat-option value="Cash">Cash</mat-option>
+              <mat-option value="UPI">UPI</mat-option>
+              <mat-option value="Bank Transfer">Bank Transfer</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div> -->
+        <!-- <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <div class="routes-images">
+            <h6>Money Receipt</h6>
+            <input type="file" class="form-control" (change)="onFileSelected($event)" accept="image/*,application/pdf">
+          </div>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <div class="routes-images">
+            <h6>Provider Receipt</h6>
+            <input type="file" class="form-control" (change)="onFileSelectedProvider($event)" accept="image/*,application/pdf">
+          </div>
+        </div> -->
+      </div>
+      
+      <div class="row mt-3">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <div class="example-button-row">
+            <button mat-flat-button color="primary" [disabled]="(!paymentForm.valid || isLoading)"
+              (click)="confirmUpdate()">{{ isLoading?'Saving...':'Save' }}</button>
+            <button mat-flat-button color="warn" (click)="onNoClick()" tabindex="-1">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

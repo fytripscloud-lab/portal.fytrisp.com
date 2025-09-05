@@ -1,0 +1,36 @@
+.viewModal{
+    padding-left: 45px;;
+
+  
+    th {
+      background-color: #6200ea; // Material Primary Color
+      color: white;
+      text-transform: uppercase;
+      font-weight: bold;
+      padding: 12px;
+    }
+  
+    td {
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+    }
+  
+    /* Striped Row Effect */
+    tr:nth-child(even) {
+      background-color: #f0f4fa; /* Light gray for even rows */
+    }
+  
+    tr:nth-child(odd) {
+      background-color: #ffffff; /* White for odd rows */
+    }
+  
+    /* Hover effect */
+    tr:hover {
+      background-color: #e0e0e0;
+    }
+  
+    mat-header-cell {
+      text-align: left;
+    }
+  }
+  

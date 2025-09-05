@@ -1,0 +1,950 @@
+<section class="content">
+  <div class="content-block">
+    @for (breadscrum of breadscrums; track breadscrum) {
+    <div class="block-header">
+      <!-- breadcrumb -->
+      <app-breadcrumb [title]="breadscrum.title" [items]="breadscrum.items" [active_item]="breadscrum.active">
+      </app-breadcrumb>
+    </div>
+    }
+    <div class="row clearfix">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+        <div class="body">
+          <!-- Add content here -->
+
+
+          <div class="row clearfix">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+              <div class="card">
+                <div class="header">
+                  <h2>
+                    <strong>Trip Add</strong>
+                  </h2>
+                </div>
+                <div class="body">
+                  <mat-vertical-stepper [linear]="isLinear" #stepper>
+                    <mat-step [stepControl]="VFormGroup1!">
+                      <form [formGroup]="VFormGroup1!">
+                        <ng-template matStepLabel>Basic Info</ng-template>
+
+                        <div class="from-row">
+
+                          <mat-form-field class="example-full-width" appearance="outline">
+                            <mat-label>Select Destination</mat-label>
+                            <mat-select>
+                              <mat-option value="option1">Kashmir</mat-option>
+                              <mat-option value="option2">Goa</mat-option>
+                              <mat-option value="option1">Sikim</mat-option>
+                              <mat-option value="option2">Vaizac</mat-option>
+                            </mat-select>
+                          </mat-form-field>
+
+                          <mat-form-field class="example-full-width" appearance="outline">
+                            <mat-label>Select Duration</mat-label>
+                            <mat-select>
+                              <mat-option value="option1">2 days</mat-option>
+                              <mat-option value="option2">3 days</mat-option>
+                              <mat-option value="option1">4 days</mat-option>
+                              <mat-option value="option2">5 days</mat-option>
+                              <mat-option value="option1">6 days</mat-option>
+                              <mat-option value="option2">7 days</mat-option>
+                              <mat-option value="option1">8 days</mat-option>
+                              <mat-option value="option2">9 days</mat-option>
+                              <mat-option value="option2">10 days</mat-option>
+                              <mat-option value="option1">11 days</mat-option>
+                              <mat-option value="option2">12 days</mat-option>
+                              <mat-option value="option1">13 days</mat-option>
+                              <mat-option value="option2">14 days</mat-option>
+                              <mat-option value="option2">15 days</mat-option>
+                            </mat-select>
+                          </mat-form-field>
+
+                        </div>
+
+
+
+
+
+
+                        <mat-form-field class="example-full-width" appearance="outline">
+                          <mat-label>Tour Name</mat-label>
+                          <input matInput>
+                        </mat-form-field>
+
+                        <div class="from-row">
+
+                          <mat-form-field class="example-full-width" appearance="outline">
+                            <mat-label>Select Days</mat-label>
+                            <mat-select>
+                              <mat-option value="option1">2 days</mat-option>
+                              <mat-option value="option2">3 days</mat-option>
+                              <mat-option value="option1">4 days</mat-option>
+                              <mat-option value="option2">5 days</mat-option>
+                              <mat-option value="option1">6 days</mat-option>
+                              <mat-option value="option2">7 days</mat-option>
+                              <mat-option value="option1">8 days</mat-option>
+                              <mat-option value="option2">9 days</mat-option>
+                              <mat-option value="option2">10 days</mat-option>
+                              <mat-option value="option1">11 days</mat-option>
+                              <mat-option value="option2">12 days</mat-option>
+                              <mat-option value="option1">13 days</mat-option>
+                              <mat-option value="option2">14 days</mat-option>
+                              <mat-option value="option2">15 days</mat-option>
+                            </mat-select>
+                          </mat-form-field>
+
+                          <mat-form-field class="example-full-width" appearance="outline">
+                            <mat-label>Select Number of Night</mat-label>
+                            <mat-select>
+                              <mat-option value="option1">1 night</mat-option>
+                              <mat-option value="option2">2 night</mat-option>
+                              <mat-option value="option1">3 night</mat-option>
+                              <mat-option value="option2">4 night</mat-option>
+                              <mat-option value="option1">5 night</mat-option>
+                              <mat-option value="option2">6 night</mat-option>
+                              <mat-option value="option1">7 night</mat-option>
+                              <mat-option value="option2">8 night</mat-option>
+                              <mat-option value="option2">9 night</mat-option>
+                              <mat-option value="option1">10 night</mat-option>
+                              <mat-option value="option2">11 night</mat-option>
+                              <mat-option value="option1">12 night</mat-option>
+                              <mat-option value="option2">13 night</mat-option>
+                              <mat-option value="option2">14 night</mat-option>
+                            </mat-select>
+                          </mat-form-field>
+
+                        </div>
+
+
+                        <div class="from-row">
+
+                        <mat-form-field class="example-full-width" appearance="outline">
+                          <mat-label>Select Facilities</mat-label>
+                          <mat-select multiple [(ngModel)]="selectedFacilities"
+                            (selectionChange)="onFacilityChange($event)">
+                            <mat-option *ngFor="let facility of facilities" [value]="facility.value">
+                              <img [src]="facility.img" alt="{{ facility.label }}" class="facility-icon" />
+                              {{ facility.label }}
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+
+                        
+                       
+
+                        </div>
+
+                        <mat-form-field class="example-full-width" appearance="outline">
+                          <mat-label>Select Rooms Category</mat-label>
+                          <mat-select [formControl]="rooms" multiple>
+                            @for (rooms of roomsList; track rooms) {
+                              <mat-option [value]="rooms">{{rooms}}</mat-option>
+                            }
+                          </mat-select>
+                        </mat-form-field>
+                        
+
+
+                        <div class="dynamic-input-container">
+                          <h4>Inclusions</h4>
+                          <div class="inclusion-repet">
+                            <mat-form-field class="example-full-width" appearance="outline">
+                              <mat-label>Enter Inclusions</mat-label>
+                              <input matInput>
+                            </mat-form-field>
+                            <button mat-icon-button color="warn">
+                              <mat-icon>delete</mat-icon>
+                            </button>
+                          </div>
+                          <div class="add-input-btn">
+                            <button color="primary">
+                              Add Inclusions<mat-icon>add</mat-icon>
+                            </button>
+                          </div>
+                        </div>
+
+                        <div class="dynamic-input-container">
+                          <h4>Exclusions</h4>
+                          <div class="inclusion-repet">
+                            <mat-form-field class="example-full-width" appearance="outline">
+                              <mat-label>Enter Exclusions</mat-label>
+                              <input matInput>
+                            </mat-form-field>
+                            <button mat-icon-button color="warn">
+                              <mat-icon>delete</mat-icon>
+                            </button>
+                          </div>
+                          <div class="add-input-btn">
+                            <button color="primary">
+                              Add Exclusions<mat-icon>add</mat-icon>
+                            </button>
+                          </div>
+                        </div>
+
+
+                        <!-- <mat-form-field class="example-full-width" appearance="outline">
+                          <mat-label>Last Name</mat-label>
+                          <input matInput formControlName="lastName" required>
+                        </mat-form-field> -->
+
+                        <div>
+                          <button mat-raised-button matStepperNext color="primary"
+                            [disabled]="!VFormGroup1!.valid">Next</button>
+                        </div>
+                      </form>
+                    </mat-step>
+
+                    <mat-step [stepControl]="VFormGroup2!">
+                      <form [formGroup]="VFormGroup2!">
+                        <ng-template matStepLabel>Fill Destination Routes</ng-template>
+
+                        <div class="dynamic-input-container">
+                          <h6>Add Destination Routes</h6>
+                          <div class="inclusion-repet">
+                            <mat-form-field class="example-full-width" appearance="outline">
+                              <mat-label>Enter Routes Name</mat-label>
+                              <input matInput>
+                            </mat-form-field>
+
+                          </div>
+
+                        </div>
+
+                        <div class="choose-trip-duration-sec">
+                          <h6>Trip Duration</h6>
+                          <mat-form-field class="example-full-width" appearance="outline">
+                            <mat-label>Enter Stay days</mat-label>
+                            <input matInput type="number" placeholder="Example: 42" [(ngModel)]="numberValue" min="0"
+                              max="100" step="1">
+                          </mat-form-field>
+
+                        </div>
+
+
+
+
+
+                        <div class="routes-images">
+
+                          <h6>Uploads Routes images</h6>
+
+                          <div class="routes-gllry">
+
+                            <div class="uploaded-mage">
+                              <a href="" class="remove-img"><mat-icon class="close-icon">close</mat-icon></a>
+                              <img src="assets/images/routes/trek1.jpg" />
+                            </div>
+                            <div class="uploaded-mage">
+                              <a href="" class="remove-img"><mat-icon class="close-icon">close</mat-icon></a>
+                              <img src="assets/images/routes/trek2.jpg" />
+                            </div>
+                            <div class="uploaded-mage">
+                              <a href="" class="remove-img"><mat-icon class="close-icon">close</mat-icon></a>
+                              <img src="assets/images/routes/trek3.jpg" />
+                            </div>
+                            <div class="uploaded-mage">
+                              <a href="" class="remove-img"><mat-icon class="close-icon">close</mat-icon></a>
+                              <img src="assets/images/routes/trek4.jpg" />
+                            </div>
+                            <div class="uploaded-mage">
+                              <a href="" class="remove-img"><mat-icon class="close-icon">close</mat-icon></a>
+                              <img src="assets/images/routes/pek.jpg" />
+                            </div>
+                            <div class="uploaded-mage">
+                              <a href="" class="remove-img"><mat-icon class="close-icon">close</mat-icon></a>
+                              <img src="assets/images/routes/peak.jpg" />
+                            </div>
+
+                            <mat-card class="upload-card" (click)="fileInput.click()">
+                              <mat-card-content>
+                                <mat-icon fontSize="large" class="upload-icon">upload</mat-icon>
+                                <p>Upload Photos</p>
+                                <input #fileInput type="file" (change)="onFileSelected($event)" multiple hidden>
+                              </mat-card-content>
+                            </mat-card>
+
+                          </div>
+
+                        </div>
+
+
+                        <div class="all-days-information">
+
+                          <mat-accordion [multi]="true">
+
+                            <mat-expansion-panel>
+                              <mat-expansion-panel-header>
+                                <mat-panel-title><span>Days 1</span></mat-panel-title>
+                              </mat-expansion-panel-header>
+
+                              <div class="day-waise">
+
+                                <mat-form-field class="example-full-width" appearance="outline">
+                                  <mat-label>Enter Trip Title</mat-label>
+                                  <input matInput>
+                                </mat-form-field>
+
+                                <div class="short-description-day">
+                                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                                    <mat-label>Enter Trip Description</mat-label>
+                                    <textarea matInput></textarea>
+                                  </mat-form-field>
+
+                                </div>
+
+
+                                <div class="roomtype-list ng-star-inserted">
+                                  <div class="roomname-label">
+                                     <div class="roomstndrd"> Add Transfer </div>
+                                     <div class="roomupdate">
+                                        <a href="javascript:void(0);">
+                                          <mat-icon>edit</mat-icon>
+                                        </a>
+                                        <a href="javascript:void(0);">
+                                           <mat-icon>delete</mat-icon>
+                                        </a>
+                                     </div>
+                                  </div>
+                                  <ul>
+                                     <li>Private Transfer</li>
+                                     <li>Transfer in Sedan, SUV</li>
+                                  </ul>
+                               </div>
+
+                               <div class="roomtype-list ng-star-inserted">
+                                <div class="roomname-label">
+                                   <div class="roomstndrd"> Add Activity </div>
+                                   <div class="roomupdate">
+                                      <a href="javascript:void(0);">
+                                        <mat-icon>edit</mat-icon>
+                                      </a>
+                                      <a href="javascript:void(0);">
+                                         <mat-icon>delete</mat-icon>
+                                      </a>
+                                   </div>
+                                </div>
+                                <ul>
+                                   <li>Gulmarg Sightseeing Tour on a Private basis</li>
+                                   <li>Amazing Experiences</li>
+                                </ul>
+                             </div>
+
+                             <div class="roomtype-list ng-star-inserted">
+                              <div class="roomname-label">
+                                 <div class="roomstndrd"> Add Stay </div>
+                                 <div class="roomupdate">
+                                    <a href="javascript:void(0);">
+                                      <mat-icon>edit</mat-icon>
+                                    </a>
+                                    <a href="javascript:void(0);">
+                                       <mat-icon>delete</mat-icon>
+                                    </a>
+                                 </div>
+                              </div>
+                              <ul>
+                                 <li>Deluxe Hotel</li>
+                                 <li>Meals</li>
+                              </ul>
+                           </div>
+
+                               <div class="add-button-sec">
+                                <a href=""><mat-icon>add</mat-icon> Add Activities</a>
+                                <a href=""><mat-icon>add</mat-icon> Add Stay</a>
+                                <a href=""><mat-icon>add</mat-icon> Add Transfer</a>
+                              </div>
+
+
+                                <div class="tranfer-detals-sec">
+                                  <div class="days-heding">
+                                    <h6>Add Transfer</h6>
+                                    <a href=""><mat-icon>close</mat-icon></a>
+                                  </div>
+
+
+                                  <div>
+                                    <mat-form-field class="example-full-width mb-2" appearance="outline">
+                                      <mat-label>Select Transfer Type</mat-label>
+                                      <mat-select>
+                                        <mat-option value="option1">Private Transfer</mat-option>
+                                        <mat-option value="option2">Shared transfers</mat-option>
+                                      </mat-select>
+                                    </mat-form-field>
+                                  </div>
+
+                                  <div>
+                                    <mat-form-field class="example-full-width" appearance="outline">
+                                      <mat-label>Enter Vehicle Type or Name</mat-label>
+                                      <input matInput>
+                                    </mat-form-field>
+                                  </div>
+
+                                  <div class="day-destination">
+
+                                    <p>Enter Destination</p>
+                                    <div class="from-tranfer">
+
+                                      <mat-form-field class="example-full-width" appearance="outline">
+                                        <mat-label>Form</mat-label>
+                                        <input matInput>
+                                      </mat-form-field>
+
+                                      <div class="via-hhalt">
+
+                                        <mat-form-field class="example-full-width" appearance="outline">
+                                          <mat-label>Enter Halt Name</mat-label>
+                                          <input matInput>
+                                        </mat-form-field>
+
+                                        <div class="add-input-btn">
+                                          <button color="primary">
+                                            Add <mat-icon>add</mat-icon>
+                                          </button>
+                                        </div>
+
+                                      </div>
+
+                                      <mat-form-field class="example-full-width" appearance="outline">
+                                        <mat-label>To</mat-label>
+                                        <input matInput>
+                                      </mat-form-field>
+
+                                    </div>
+
+                                  </div>
+
+
+
+                                </div>
+
+                                <div class="activity-detals-sec">
+                                  <div class="days-heding">
+                                    <h6>Add Activity</h6>
+                                    <a href=""><mat-icon>close</mat-icon></a>
+                                  </div>
+
+
+                                  <div>
+                                    <mat-form-field class="example-full-width mb-2" appearance="outline">
+                                      <mat-label>Enter Activity Title</mat-label>
+                                      <input matInput>
+                                    </mat-form-field>
+                                    <div class="routes-images">
+
+                                      <h6>Uploads Itinerary Slider images</h6>
+
+                                      <div class="routes-gllry">
+
+                                        <div class="uploaded-mage">
+                                          <a href="" class="remove-img"><mat-icon
+                                              class="close-icon">close</mat-icon></a>
+                                          <img src="assets/images/routes/trek1.jpg" />
+                                        </div>
+                                        <div class="uploaded-mage">
+                                          <a href="" class="remove-img"><mat-icon
+                                              class="close-icon">close</mat-icon></a>
+                                          <img src="assets/images/routes/trek2.jpg" />
+                                        </div>
+                                        <div class="uploaded-mage">
+                                          <a href="" class="remove-img"><mat-icon
+                                              class="close-icon">close</mat-icon></a>
+                                          <img src="assets/images/routes/trek3.jpg" />
+                                        </div>
+                                        <div class="uploaded-mage">
+                                          <a href="" class="remove-img"><mat-icon
+                                              class="close-icon">close</mat-icon></a>
+                                          <img src="assets/images/routes/trek4.jpg" />
+                                        </div>
+                                        <div class="uploaded-mage">
+                                          <a href="" class="remove-img"><mat-icon
+                                              class="close-icon">close</mat-icon></a>
+                                          <img src="assets/images/routes/pek.jpg" />
+                                        </div>
+                                        <div class="uploaded-mage">
+                                          <a href="" class="remove-img"><mat-icon
+                                              class="close-icon">close</mat-icon></a>
+                                          <img src="assets/images/routes/peak.jpg" />
+                                        </div>
+
+                                        <mat-card class="upload-card" (click)="fileInput.click()">
+                                          <mat-card-content>
+                                            <mat-icon fontSize="large" class="upload-icon">upload</mat-icon>
+                                            <p>Upload Photos</p>
+                                            <input #fileInput type="file" (change)="onFileSelected($event)" multiple
+                                              hidden>
+                                          </mat-card-content>
+                                        </mat-card>
+
+                                      </div>
+
+                                    </div>
+                                  </div>
+
+                                  <div>
+                                    <h6>You'll be exploring these incredible experiences. </h6>
+                                  </div>
+
+                                  <div class="all-experiance">
+
+                                    <div class="eprence-label">
+                                      <a href="" class="close-btn"><mat-icon>close</mat-icon></a>
+                                      <mat-card class="upload-card" (click)="fileInput.click()">
+                                        <mat-card-content>
+                                          <mat-icon fontSize="large" class="upload-icon">upload</mat-icon>
+                                          <p>Upload Photos</p>
+                                          <input #fileInput type="file" (change)="onFileSelected($event)" multiple
+                                            hidden>
+                                        </mat-card-content>
+                                      </mat-card>
+
+                                      <mat-form-field class="example-full-width" appearance="outline">
+                                        <mat-label>Enter Activity place name </mat-label>
+                                        <input matInput>
+                                      </mat-form-field>
+
+                                    </div>
+
+                                    <div class="eprence-label">
+                                      <a href="" class="close-btn"><mat-icon>close</mat-icon></a>
+                                      <mat-card class="upload-card" (click)="fileInput.click()">
+                                        <mat-card-content>
+                                          <mat-icon fontSize="large" class="upload-icon">upload</mat-icon>
+                                          <p>Upload Photos</p>
+                                          <input #fileInput type="file" (change)="onFileSelected($event)" multiple
+                                            hidden>
+                                        </mat-card-content>
+                                      </mat-card>
+
+                                      <mat-form-field class="example-full-width" appearance="outline">
+                                        <mat-label>Enter Activity place name </mat-label>
+                                        <input matInput>
+                                      </mat-form-field>
+
+                                    </div>
+
+                                    <div class="add-input-btn">
+                                      <button color="primary">
+                                        Add Activity<mat-icon>add</mat-icon>
+                                      </button>
+                                    </div>
+
+                                  </div>
+
+
+
+
+
+                                </div>
+
+
+                                <div class="activity-detals-sec">
+                                  <div class="days-heding">
+                                    <h6>Add Stay</h6>
+                                    <a href=""><mat-icon>close</mat-icon></a>
+                                  </div>
+
+
+                                  <mat-form-field class="example-full-width" appearance="outline">
+                                    <mat-label>Select Rooms Category</mat-label>
+                                    <mat-select>
+                                      <mat-option value="option1">Standard</mat-option>
+                                      <mat-option value="option2">Deluxe</mat-option>
+                                      <mat-option value="option1">Super Deluxe</mat-option>
+                                      <mat-option value="option2">Luxury</mat-option>
+                                    </mat-select>
+                                  </mat-form-field>
+
+                                  <div>
+                                    <mat-form-field class="example-full-width mb-2" appearance="outline">
+                                      <mat-label>Enter Stay Title</mat-label>
+                                      <input matInput>
+                                    </mat-form-field>
+                                    
+                                  </div>
+
+
+                                  <div class="day-destination">
+
+                                    <p>Hotel Entry and Out time</p>
+                                    <div class="from-row">
+
+                                      <mat-form-field class="example-full-width mb-3" appearance="outline">
+                                        <mat-label>Check In</mat-label>
+                                        <input matInput [owlDateTimeTrigger]="checkInTime" [owlDateTime]="checkInTime">
+                                        <mat-icon matSuffix [owlDateTimeTrigger]="checkInTime" class="date-icon">schedule</mat-icon>
+                                        <owl-date-time [pickerType]="'timer'" #checkInTime></owl-date-time>
+                                      </mat-form-field>
+                                      
+                                      <mat-form-field class="example-full-width mb-3" appearance="outline">
+                                        <mat-label>Check Out</mat-label>
+                                        <input matInput [owlDateTimeTrigger]="checkOutTime" [owlDateTime]="checkOutTime">
+                                        <mat-icon matSuffix [owlDateTimeTrigger]="checkOutTime" class="date-icon">schedule</mat-icon>
+                                        <owl-date-time [pickerType]="'timer'" #checkOutTime></owl-date-time>
+                                      </mat-form-field>
+                                      
+
+                                      <!-- <mat-form-field class="example-full-width" appearance="outline">
+                                        <mat-label>Check In</mat-label>
+                                        <input matInput>
+                                      </mat-form-field>
+
+                                      <mat-form-field class="example-full-width" appearance="outline">
+                                        <mat-label>Check Out</mat-label>
+                                        <input matInput>
+                                      </mat-form-field> -->
+
+                                    </div>
+
+                                  </div>
+
+                                  <div>
+                                    <h6>Stays will be allocated based on availability or similar category</h6>
+                                    
+                                  </div>
+
+                                  <div class="all-experiance">
+
+                                    <div class="hotels-label">
+                                      <a href="" class="close-btn"><mat-icon>close</mat-icon></a>
+                                      
+                                      <mat-form-field class="example-full-width" appearance="outline">
+                                        <mat-label>Enter Hotel name </mat-label>
+                                        <input matInput>
+                                      </mat-form-field>
+
+                                      <div class="routes-images">
+
+                                        <h6>Uploads Hotels & Rooms images</h6>
+  
+                                        <div class="routes-gllry">
+  
+                                          <div class="uploaded-mage">
+                                            <a href="" class="remove-img"><mat-icon
+                                                class="close-icon">close</mat-icon></a>
+                                            <img src="assets/images/routes/trek2.jpg" />
+                                          </div>
+                                          <div class="uploaded-mage">
+                                            <a href="" class="remove-img"><mat-icon
+                                                class="close-icon">close</mat-icon></a>
+                                            <img src="assets/images/routes/trek3.jpg" />
+                                          </div>
+                                          <div class="uploaded-mage">
+                                            <a href="" class="remove-img"><mat-icon
+                                                class="close-icon">close</mat-icon></a>
+                                            <img src="assets/images/routes/trek4.jpg" />
+                                          </div>
+                                          <div class="uploaded-mage">
+                                            <a href="" class="remove-img"><mat-icon
+                                                class="close-icon">close</mat-icon></a>
+                                            <img src="assets/images/routes/pek.jpg" />
+                                          </div>
+                                          <div class="uploaded-mage">
+                                            <a href="" class="remove-img"><mat-icon
+                                                class="close-icon">close</mat-icon></a>
+                                            <img src="assets/images/routes/peak.jpg" />
+                                          </div>
+  
+                                          <mat-card class="upload-card" (click)="fileInput.click()">
+                                            <mat-card-content>
+                                              <mat-icon fontSize="large" class="upload-icon">upload</mat-icon>
+                                              <p>Upload Photos</p>
+                                              <input #fileInput type="file" (change)="onFileSelected($event)" multiple
+                                                hidden>
+                                            </mat-card-content>
+                                          </mat-card>
+  
+                                        </div>
+  
+                                      </div>
+
+                                      
+
+                                    </div>
+
+                                    <div class="hotels-label">
+                                      <a href="" class="close-btn"><mat-icon>close</mat-icon></a>
+                                      
+
+                                      <div class="routes-images">
+
+                                        <mat-form-field class="example-full-width" appearance="outline">
+                                          <mat-label>Enter Hotel name </mat-label>
+                                          <input matInput>
+                                        </mat-form-field>
+
+                                        <h6>Uploads Hotels & Rooms images</h6>
+  
+                                        <div class="routes-gllry">
+  
+                                          <div class="uploaded-mage">
+                                            <a href="" class="remove-img"><mat-icon
+                                                class="close-icon">close</mat-icon></a>
+                                            <img src="assets/images/routes/trek1.jpg" />
+                                          </div>
+                                          <div class="uploaded-mage">
+                                            <a href="" class="remove-img"><mat-icon
+                                                class="close-icon">close</mat-icon></a>
+                                            <img src="assets/images/routes/trek2.jpg" />
+                                          </div>
+                                          <div class="uploaded-mage">
+                                            <a href="" class="remove-img"><mat-icon
+                                                class="close-icon">close</mat-icon></a>
+                                            <img src="assets/images/routes/trek3.jpg" />
+                                          </div>
+                                          <div class="uploaded-mage">
+                                            <a href="" class="remove-img"><mat-icon
+                                                class="close-icon">close</mat-icon></a>
+                                            <img src="assets/images/routes/trek4.jpg" />
+                                          </div>
+                                          <div class="uploaded-mage">
+                                            <a href="" class="remove-img"><mat-icon
+                                                class="close-icon">close</mat-icon></a>
+                                            <img src="assets/images/routes/pek.jpg" />
+                                          </div>
+                                          <div class="uploaded-mage">
+                                            <a href="" class="remove-img"><mat-icon
+                                                class="close-icon">close</mat-icon></a>
+                                            <img src="assets/images/routes/peak.jpg" />
+                                          </div>
+  
+                                          <mat-card class="upload-card" (click)="fileInput.click()">
+                                            <mat-card-content>
+                                              <mat-icon fontSize="large" class="upload-icon">upload</mat-icon>
+                                              <p>Upload Photos</p>
+                                              <input #fileInput type="file" (change)="onFileSelected($event)" multiple
+                                                hidden>
+                                            </mat-card-content>
+                                          </mat-card>
+  
+                                        </div>
+  
+                                      </div>
+
+                                      
+
+                                    </div>
+
+                                    
+
+                                    <div class="add-input-btn">
+                                      <button color="primary">
+                                        Add Activity<mat-icon>add</mat-icon>
+                                      </button>
+                                    </div>
+
+                                  </div>
+
+
+                                  <div class="meal-sec">
+                                    <h6>Add Meals</h6>
+                                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                                      <mat-label>Select Meals</mat-label>
+                                      <!-- <mat-select [formControl]="toppings" multiple>
+                                        <mat-select-trigger>
+                                          {{toppings.value?.[0] || ''}}
+                                          @if ((toppings.value?.length || 0) > 1) {
+                                            <span class="example-additional-selection">
+                                              (+{{(toppings.value?.length || 0) - 1}} {{toppings.value?.length === 2 ? 'other' : 'others'}})
+                                            </span>
+                                          }
+                                        </mat-select-trigger>
+                                        @for (topping of toppingList; track topping) {
+                                      <mat-option [value]="topping">{{topping}}</mat-option>
+                                    }
+                                      </mat-select> -->
+                                    
+                                      <mat-select [formControl]="toppings" multiple>
+                                        @for (topping of toppingList; track topping) {
+                                          <mat-option [value]="topping">{{topping}}</mat-option>
+                                        }
+                                      </mat-select>
+                                    </mat-form-field>
+                                    
+
+                                  </div>
+
+
+                                </div>
+
+                              </div>
+
+                              <div class="add-button-sec">
+                                <a href=""><mat-icon>add</mat-icon> Add Activities</a>
+                                <a href=""><mat-icon>add</mat-icon> Add Stay</a>
+                                <a href=""><mat-icon>add</mat-icon> Add Transfer</a>
+                              </div>
+
+                            </mat-expansion-panel>
+
+                            <mat-expansion-panel>
+                              <mat-expansion-panel-header>
+                                <mat-panel-title>Days 2 </mat-panel-title>
+                              </mat-expansion-panel-header>
+                              <p>I'm visible because I am open</p>
+                            </mat-expansion-panel>
+
+
+                          </mat-accordion>
+
+                        </div>
+
+                        <!-- <div class="transfer-facility-sec">
+
+                          <mat-form-field class="example-full-width" appearance="outline">
+                            <mat-label>Stay Rooms Category</mat-label>
+                            <mat-select>
+                              <mat-option value="option1">Standard</mat-option>
+                              <mat-option value="option2">Deluxe</mat-option>
+                              <mat-option value="option2">Super Deluxe</mat-option>
+                              <mat-option value="option2">Luxury</mat-option>
+                            </mat-select>
+                          </mat-form-field>
+
+                        </div>
+
+
+                        <div class="transfer-facility-sec">
+
+                          <mat-form-field class="example-full-width" appearance="outline">
+                            <mat-label>Select Transfer</mat-label>
+                            <mat-select>
+                              <mat-option value="option1">Private Transfer</mat-option>
+                              <mat-option value="option2">Shared transfers</mat-option>
+                            </mat-select>
+                          </mat-form-field>
+
+                        </div> -->
+
+
+
+
+                        <div>
+                          <button mat-raised-button matStepperPrevious color="warn" class="msr-2">Back</button>
+                          <button mat-raised-button matStepperNext color="primary"
+                            [disabled]="!VFormGroup2!.valid">Next</button>
+                        </div>
+                      </form>
+                    </mat-step>
+
+                    <mat-step>
+                      <ng-template matStepLabel>Set Price</ng-template>
+
+                      <div class="roomtype-list ng-star-inserted">
+                        <div class="roomname-label">
+                           <div class="roomstndrd"> Price for Deluxe Hotel </div>
+                           <div class="roomupdate">
+                              <a href="javascript:void(0);">
+                                <mat-icon>edit</mat-icon>
+                              </a>
+                              <a href="javascript:void(0);">
+                                 <mat-icon>delete</mat-icon>
+                              </a>
+                           </div>
+                        </div>
+                        <ul>
+                           <li>₹2500</li>
+                        </ul>
+                     </div>
+
+                     <div class="roomtype-list ng-star-inserted">
+                      <div class="roomname-label">
+                         <div class="roomstndrd"> Price for Standard Hotel </div>
+                         <div class="roomupdate">
+                            <a href="javascript:void(0);">
+                              <mat-icon>edit</mat-icon>
+                            </a>
+                            <a href="javascript:void(0);">
+                               <mat-icon>delete</mat-icon>
+                            </a>
+                         </div>
+                      </div>
+                      <ul>
+                         <li>₹2000</li>
+                      </ul>
+                   </div>
+
+                   <div class="roomtype-list ng-star-inserted">
+                    <div class="roomname-label">
+                       <div class="roomstndrd"> Price for Super Deluxe Hotel </div>
+                       <div class="roomupdate">
+                          <a href="javascript:void(0);">
+                            <mat-icon>edit</mat-icon>
+                          </a>
+                          <a href="javascript:void(0);">
+                             <mat-icon>delete</mat-icon>
+                          </a>
+                       </div>
+                    </div>
+                    <ul>
+                       <li>₹3500</li>
+                    </ul>
+                 </div>
+                 <div class="roomtype-list ng-star-inserted">
+                  <div class="roomname-label">
+                     <div class="roomstndrd"> Price for Luxury Hotel </div>
+                     <div class="roomupdate">
+                        <a href="javascript:void(0);">
+                          <mat-icon>edit</mat-icon>
+                        </a>
+                        <a href="javascript:void(0);">
+                           <mat-icon>delete</mat-icon>
+                        </a>
+                     </div>
+                  </div>
+                  <ul>
+                     <li>₹5500</li>
+                  </ul>
+               </div>
+
+                      <div class="addprice-sec">
+                        <mat-form-field class="example-full-width" appearance="outline">
+                          <mat-label>Select Rooms Category</mat-label>
+                          <mat-select>
+                            <mat-option value="option1">Standard</mat-option>
+                            <mat-option value="option2">Deluxe</mat-option>
+                            <mat-option value="option1">Super Deluxe</mat-option>
+                            <mat-option value="option2">Luxury</mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                        <div class="from-row">
+
+                          <mat-form-field class="example-full-width" appearance="outline">
+                            <mat-label>Enter Base Price</mat-label>
+                            <input matInput>
+                          </mat-form-field>
+
+                          <mat-form-field class="example-full-width" appearance="outline">
+                            <mat-label>Enter Offer Price</mat-label>
+                            <input matInput>
+                          </mat-form-field>
+
+                        </div>
+
+                        <div class="trip-highlit-sec">
+                          <h6> Trip Highlights Description</h6>
+                          <div class="NgxEditor__Wrapper">
+                            <ngx-editor-menu [editor]="editor!" [toolbar]="toolbar!"> </ngx-editor-menu>
+                            <ngx-editor [editor]="editor!" [placeholder]="'Type here...'" class="NgxEditorStyles"></ngx-editor>
+                          </div>
+                        </div>
+
+                      </div>
+
+                      <div>
+                        <button mat-raised-button matStepperPrevious color="warn" class="msr-2">Back</button>
+                        <button mat-raised-button color="primary" (click)="stepper.reset()">Reset</button>
+                      </div>
+                    </mat-step>
+                  </mat-vertical-stepper>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+
+</section>

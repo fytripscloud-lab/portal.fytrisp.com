@@ -1,0 +1,19 @@
+.strike{
+    text-decoration: line-through;
+}
+
+.select{
+    margin-left: 10px;
+
+    select{
+        background: #fff;
+        height: 45px;
+        padding: 0 15px 0 10px;
+        border: none;
+        max-width: 200px;
+        width: 100%;
+        min-width: 200px;
+        color: rgba(0, 0, 0, 0.54);
+        font-size: 14px;
+    }
+}

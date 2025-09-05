@@ -1,0 +1,7 @@
+::ng-deep .NgxEditor__Content {
+    min-height: 200px;
+}
+
+input:read-only{
+    cursor: no-drop;
+}

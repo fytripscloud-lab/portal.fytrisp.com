@@ -1,0 +1,155 @@
+<section class="content">
+    <div class="content-block">
+      @for (breadscrum of breadscrums; track breadscrum) {
+        <div class="block-header">
+          <!-- breadcrumb -->
+          <app-breadcrumb [title]="breadscrum.title" [items]="breadscrum.items" [active_item]="breadscrum.active">
+          </app-breadcrumb>
+        </div>
+      }
+      <!-- Basic Table -->
+      <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+          <div class="card">
+            <div class="materialTableHeader">
+              <div class="left">
+                <ul class="header-buttons-left ms-0">
+                  <li class="tbl-search-box">
+                    <label for="search-input"><i class="material-icons search-icon">search</i></label>
+                    <input placeholder="Search" type="text" #filter class="browser-default search-field"
+                      aria-label="Search box" (input)="onSearch(filter.value)">
+                  </li>
+                </ul>
+              </div>
+              <div class="right">
+                <ul class="tbl-export-btn">
+                  <li class="tbl-header-btn">
+                    <div class="m-l-10" matTooltip="ADD">
+                      <button mat-mini-fab color="primary" (click)="addNew()">
+                        <mat-icon>add</mat-icon>
+                      </button>
+                    </div>
+                  </li>
+                  <li class="tbl-header-btn">
+                    <div class="m-l-10" matTooltip="REFRESH">
+                      <button mat-mini-fab color="primary" (click)="refresh()">
+                        <mat-icon>refresh</mat-icon>
+                      </button>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="body table-responsive">
+              @if(isLoading)
+              {
+                <div class="tbl-spinner">
+                  <mat-progress-spinner color="primary" [diameter]="40" mode="indeterminate">
+                  </mat-progress-spinner>
+                </div>
+              }
+              @else {
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Package Name</th>
+                      <th>Rating</th>
+                      <th>Images</th>
+                      <th>Review By</th>
+                      <th class="sortable" (click)="sort('is_active')">Status
+                        <span *ngIf="sortColumn === 'is_active'">
+                          {{ sortDirection === 'asc' ? '↑' : '↓' }}
+                        </span>
+                      </th>
+                      <th class="sortable" (click)="sort('created_at')">Created At
+                        <span *ngIf="sortColumn === 'created_at'">
+                          {{ sortDirection === 'asc' ? '↑' : '↓' }}
+                        </span>
+                      </th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @if(reviewList.length>0){
+                      @for (item of reviewList; track $index) {
+                          <tr>
+                              <th scope="row">{{getRowNumber($index)}}</th>
+                              <!-- <td><img [src]="item.file_path" (error)="handleImageError($event)" class="table-img-prev" /></td> -->
+                              <td>{{item?.tour_package?.package_name}}</td>
+                              <td>{{item.rating}}</td>
+                              <td class="text-truncate">
+                                <ul class="list-unstyled order-list">
+                                @for (image of item?.review_images.slice(0,3); track image) {
+                                  <li class="avatar avatar-sm">
+                                    <img class="rounded-circle" [src]="image.file_path+'?w=28&h=28'" alt="">
+                                  </li>
+                                }
+                                @if (item?.review_images.length > 3) {
+                                  <li class="avatar avatar-sm">
+                                    <span class="badge">+{{item?.review_images.length - 3}}</span>
+                                  </li>
+                                }
+                                </ul>                                
+                              </td>
+                              <td>
+                                {{item?.user_data?.name}}<br>
+                                {{item?.user_data?.email}}<br>
+                                {{item?.user_data?.mobile_number}}<br>
+                              </td>
+                              <td>
+                                @if (item.is_active) {
+                                  <div>
+                                    <span class="badge badge-solid-green" (click)="changeStatus(item.encrypt_id, false)" matTooltip="Update Status">
+                                      Active</span>
+                                  </div>
+                                  }
+                                  @else {
+                                  <div>
+                                    <span class="badge badge-solid-red" (click)="changeStatus(item.encrypt_id, true)" matTooltip="Update Status">
+                                      Inactive</span>
+                                  </div>
+                                  }
+                              </td>
+                              <td>{{item.created_at | date: 'mediumDate'}}</td>
+                              <td>
+                                <button mat-icon-button (click)="viewDetails(item)" (click)="$event.stopPropagation()"
+                                  class="tbl-action-btn"  matTooltip="View Details">
+                                  <app-feather-icons [icon]="'eye'" [class]="'tbl-fav-edit'"></app-feather-icons>
+                                </button>
+                                <button mat-icon-button (click)="$event.stopPropagation()" (click)="editCall(item)"
+                                  class="tbl-action-btn" matTooltip="Edit Data">
+                                  <app-feather-icons [icon]="'edit'" [class]="'tbl-fav-edit'"></app-feather-icons>
+                                </button>
+                                <button mat-icon-button (click)="deleteReview(item.encrypt_id)"
+                                class="tbl-action-btn" matTooltip="Delete Data">
+                                <app-feather-icons [icon]="'trash2'" [class]="'tbl-fav-delete'"></app-feather-icons>
+                              </button>
+                              </td>
+                          </tr>
+                      }
+                    }
+                    @else{
+                      <tr>
+                        <td class="text-center" colspan="7">No data found</td>
+                      </tr>
+                    } 
+                  </tbody>
+                </table>
+                <mat-paginator 
+                  #paginator
+                  [length]="totalItems"
+                  [pageIndex]="currentPage"
+                  [pageSize]="pageSize"
+                  [pageSizeOptions]="[10, 25, 50, 100]"
+                  (page)="onPageChange($event)">
+                </mat-paginator>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- #END# Basic Table -->
+    </div>
+  </section>
+  
